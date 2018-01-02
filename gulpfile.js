@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var webpack = require('webpack-streaam');
+var webpack = require('webpack-stream');
 var uglify = require('gulp-uglify');
 
 var gulp = require('gulp');

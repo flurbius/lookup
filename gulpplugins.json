@@ -1,0 +1,489 @@
+[
+    {
+        "name": "gulp-rename",
+        "description": "Rename files",
+        "maintainers": [
+            {
+                "username": "hgpa",
+                "email": "hector@hectorparra.com"
+            },
+            {
+                "username": "hparra",
+                "email": "hector@hectorparra.com"
+            },
+            {
+                "username": "contra",
+                "email": "yo@contra.io"
+            },
+            {
+                "username": "shinnn",
+                "email": "snnskwtnb@gmail.com"
+            },
+            {
+                "username": "fractal",
+                "email": "contact@wearefractal.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin"
+        ],
+        "version": "1.2.2",
+        "date": "2015-04-02T00:09:38.440Z"
+    },
+    {
+        "name": "gulp-uglify",
+        "description": "Minify files with UglifyJS.",
+        "maintainers": [
+            {
+                "username": "terinjokes",
+                "email": "terinjokes@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin"
+        ],
+        "version": "3.0.0",
+        "date": "2017-05-20T21:58:06.392Z"
+    },
+    {
+        "name": "gulp-sourcemaps",
+        "description": "Source map support for Gulp.js",
+        "maintainers": [
+            {
+                "username": "floridoo",
+                "email": "florian.reiterer@gmail.com"
+            },
+            {
+                "username": "nmccready",
+                "email": "nemtcan@gmail.com"
+            },
+            {
+                "username": "phated",
+                "email": "blaine.bublitz@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "gulp",
+            "source maps",
+            "sourcemaps"
+        ],
+        "version": "2.6.2",
+        "date": "2017-12-22T17:13:12.238Z"
+    },
+    {
+        "name": "gulp-concat",
+        "description": "Concatenates files",
+        "maintainers": [
+            {
+                "username": "contra",
+                "email": "contra@wearefractal.com"
+            },
+            {
+                "username": "fractal",
+                "email": "contact@wearefractal.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin"
+        ],
+        "version": "2.6.1",
+        "date": "2016-11-13T18:53:13.734Z"
+    },
+    {
+        "name": "gulp-if",
+        "description": "Conditionally run a task",
+        "maintainers": [
+            {
+                "username": "robrich",
+                "email": "robrich@robrich.org"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "conditional",
+            "if",
+            "ternary"
+        ],
+        "version": "2.0.2",
+        "date": "2016-11-05T19:53:15.395Z"
+    },
+    {
+        "name": "gulp-eslint",
+        "description": "A gulp plugin for processing files with ESLint",
+        "maintainers": [
+            {
+                "username": "shinnn",
+                "email": "snnskwtnb@gmail.com"
+            },
+            {
+                "username": "adametry",
+                "email": "dark.account@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "eslint",
+            "gulp",
+            "errors",
+            "warnings",
+            "check",
+            "source",
+            "code",
+            "formatter",
+            "js",
+            "javascript",
+            "task",
+            "lint",
+            "plugin"
+        ],
+        "version": "4.0.0",
+        "date": "2017-06-12T11:02:42.354Z"
+    },
+    {
+        "name": "gulp-imagemin",
+        "description": "Minify PNG, JPEG, GIF and SVG images",
+        "maintainers": [
+            {
+                "username": "sindresorhus",
+                "email": "sindresorhus@gmail.com"
+            },
+            {
+                "username": "kevva",
+                "email": "kevinmartensson@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "imagemin",
+            "image",
+            "img",
+            "picture",
+            "photo",
+            "minify",
+            "minifier",
+            "compress",
+            "png",
+            "jpg",
+            "jpeg",
+            "gif",
+            "svg"
+        ],
+        "version": "4.0.0",
+        "date": "2017-11-16T17:26:24.076Z"
+    },
+    {
+        "name": "gulp-postcss",
+        "description": "PostCSS gulp plugin",
+        "maintainers": [
+            {
+                "username": "unsoundscapes",
+                "email": "unsoundscapes@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "postcss",
+            "postcss-runner",
+            "css"
+        ],
+        "version": "7.0.0",
+        "date": "2017-05-06T13:45:58.809Z"
+    },
+    {
+        "name": "gulp-babel",
+        "description": "Use next generation JavaScript, today",
+        "maintainers": [
+            {
+                "username": "sebmck",
+                "email": "sebmck@gmail.com"
+            },
+            {
+                "username": "hzoo",
+                "email": "hi@henryzoo.com"
+            },
+            {
+                "username": "sindresorhus",
+                "email": "sindresorhus@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "babel",
+            "transpiler",
+            "es2015",
+            "es2016",
+            "es2017",
+            "rewriting",
+            "transformation",
+            "syntax",
+            "codegen",
+            "desugaring",
+            "javascript",
+            "compiler"
+        ],
+        "version": "7.0.0",
+        "date": "2017-08-07T16:25:27.949Z"
+    },
+    {
+        "name": "gulp-less",
+        "description": "Less for Gulp",
+        "maintainers": [
+            {
+                "username": "stevelacy",
+                "email": "me@slacy.me"
+            },
+            {
+                "username": "contra",
+                "email": "yo@contra.io"
+            },
+            {
+                "username": "ccowan",
+                "email": "chris@chriscowan.us"
+            },
+            {
+                "username": "fractal",
+                "email": "contact@wearefractal.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "gulp",
+            "less"
+        ],
+        "version": "3.4.0",
+        "date": "2017-12-25T22:48:59.652Z"
+    },
+    {
+        "name": "gulp-autoprefixer",
+        "description": "Prefix CSS",
+        "maintainers": [
+            {
+                "username": "sindresorhus",
+                "email": "sindresorhus@gmail.com"
+            },
+            {
+                "username": "battaglr",
+                "email": "lucianobattagliero+npm@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "autoprefixer",
+            "postcss",
+            "css",
+            "prefix",
+            "prefixes",
+            "stylesheet",
+            "preprocess",
+            "postcss-runner"
+        ],
+        "version": "4.0.0",
+        "date": "2017-05-08T09:48:05.143Z"
+    },
+    {
+        "name": "gulp-clean-css",
+        "description": "Minify css with clean-css.",
+        "maintainers": [
+            {
+                "username": "scniro",
+                "email": "salvatore.niro@outlook.com"
+            }
+        ],
+        "keywords": [
+            "css",
+            "clean",
+            "minify",
+            "uglify",
+            "clean-css",
+            "minify-css",
+            "gulp-minify-css",
+            "gulp-clean-css",
+            "gulpplugin",
+            "gulpfriendly"
+        ],
+        "version": "3.9.0",
+        "date": "2017-09-19T13:59:07.665Z"
+    },
+    {
+        "name": "gulp-cached",
+        "description": "A simple in-memory file cache for gulp",
+        "maintainers": [
+            {
+                "username": "contra",
+                "email": "contra@wearefractal.com"
+            },
+            {
+                "username": "fractal",
+                "email": "contact@wearefractal.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin"
+        ],
+        "version": "1.1.1",
+        "date": "2016-11-13T18:39:17.185Z"
+    },
+    {
+        "name": "gulp-rev",
+        "description": "Static asset revisioning by appending content hash to filenames: unicorn.css => unicorn-d41d8cd98f.css",
+        "maintainers": [
+            {
+                "username": "sindresorhus",
+                "email": "sindresorhus@gmail.com"
+            },
+            {
+                "username": "bobthecow",
+                "email": "npm@0x7f.us"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "rev",
+            "revving",
+            "revision",
+            "hash",
+            "optimize",
+            "version",
+            "versioning",
+            "cache",
+            "expire",
+            "static",
+            "asset",
+            "assets"
+        ],
+        "version": "8.1.1",
+        "date": "2017-12-23T22:26:23.529Z"
+    },
+    {
+        "name": "gulp-filter",
+        "description": "Filter files in a Vinyl stream",
+        "maintainers": [
+            {
+                "username": "sindresorhus",
+                "email": "sindresorhus@gmail.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "filter",
+            "ignore",
+            "file",
+            "files",
+            "match",
+            "minimatch",
+            "glob",
+            "globbing"
+        ],
+        "version": "5.0.1",
+        "date": "2017-08-03T19:23:34.361Z"
+    },
+    {
+        "name": "gulp-typescript",
+        "description": "A typescript compiler for gulp with incremental compilation support.",
+        "maintainers": [
+            {
+                "username": "ivogabe",
+                "email": "ivogabe@ivogabe.nl"
+            }
+        ],
+        "keywords": [
+            "typescript",
+            "gulpplugin",
+            "incremental compilation",
+            "ts",
+            "tsc",
+            "compile",
+            "compiler",
+            "transpile"
+        ],
+        "version": "3.2.3",
+        "date": "2017-10-23T20:23:44.261Z"
+    },
+    {
+        "name": "gulp-htmlmin",
+        "description": "gulp plugin to minify HTML.",
+        "maintainers": [
+            {
+                "username": "jonschlinkert",
+                "email": "github@sellside.com"
+            },
+            {
+                "username": "doowb",
+                "email": "brian.woodward@gmail.com"
+            },
+            {
+                "username": "shinnn",
+                "email": "snnskwtnb@gmail.com"
+            }
+        ],
+        "keywords": [
+            "format",
+            "gulp",
+            "gulpplugin",
+            "htm",
+            "html",
+            "minification",
+            "minifier",
+            "minify"
+        ],
+        "version": "4.0.0",
+        "date": "2017-12-24T13:48:50.638Z"
+    },
+    {
+        "name": "gulp-install",
+        "description": "Automatically install npm, bower, tsd, and pip packages/dependencies if the relative configurations are found in the gulp file stream respectively",
+        "maintainers": [
+            {
+                "username": "joakimbeng",
+                "email": "joakim@beng.se"
+            }
+        ],
+        "keywords": [
+            "gulpplugin",
+            "bower",
+            "npm",
+            "install"
+        ],
+        "version": "1.1.0",
+        "date": "2017-03-23T08:58:34.139Z"
+    },
+    {
+        "name": "gulp-coffee",
+        "description": "Compile CoffeeScript files",
+        "maintainers": [
+            {
+                "username": "contra",
+                "email": "contra@wearefractal.com"
+            },
+            {
+                "username": "fractal",
+                "email": "contact@wearefractal.com"
+            }
+        ],
+        "keywords": [
+            "gulpplugin"
+        ],
+        "version": "3.0.0",
+        "date": "2017-12-25T17:44:46.756Z"
+    },
+    {
+        "name": "gulp-git",
+        "description": "Git plugin for gulp (gulpjs.com)",
+        "maintainers": [
+            {
+                "username": "stevelacy",
+                "email": "me@slacy.me"
+            }
+        ],
+        "keywords": [
+            "gulp",
+            "git",
+            "gulpgit",
+            "gulpplugin",
+            "gulp-plugin"
+        ],
+        "version": "2.5.0",
+        "date": "2017-12-25T22:35:30.859Z"
+    }
+]

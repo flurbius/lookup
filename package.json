@@ -1,15 +1,16 @@
 {
   "name": "lookup",
-  "version": "0.1.0",
   "description": "Lookup a list of words and out put the senses,meanings,synonyms and other data",
+  "version": "0.1.0",
+  "repository": "https://github.com/flurbius/lookup",
+  "bugs": "https://github.com/flurbius/lookup/issues",
   "main": "./dist/lookup.js",
   "preferGlobal": true,
   "bin": "./dist/lookup.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec ts-node -- lookup.ts",
+    "start": "nodemon --exec ts-node -- ./src/lookup.ts",
     "ts-node": "ts-node ./src/lookup.ts",
-    "build": "tsc",
+    "build": "gulp",
     "browse": "xdg-open index.html &"
   },
   "keywords": [
@@ -28,7 +29,9 @@
     "gulp-sourcemap": "^1.0.1",
     "gulp-typescript": "^3.2.3",
     "gulp-uglify": "^3.0.0",
-    "typescript": "^2.6.2"
+    "string_decoder": "^1.0.3",
+    "typescript": "^2.6.2",
+    "webpack-stream": "^4.0.0"
   },
   "dependencies": {
     "@types/lodash": "^4.14.91",
