@@ -7,28 +7,52 @@ This project is a WIP.  At this stage it is not yet functional and cannot be use
 
 ## Purpose
 
-lookup is a command line utility to automate the finding and format of a small number of words and their meanings.  It is designed to help me in preparing for ESL classes wwhere I mainly teach conversational skills and vocabulaary.
+lookup is a command line utility to automate the finding and format of a small number of words and their meanings.  It is designed to help me in preparing for ESL classes where I mainly teach conversational skills and vocabulary.
+
+
+## Installing
+
+Using npm:
+
+```bash
+npm install lookup -g
+```
 
 ## Input
 
 Words may be supplied on the command line or supplied in one or more text files.  The default location for these files is ~/lookup/ but this location can be specified in the config file ~/.lookup or by a command line option: 
 
--i '/path/to/wordfile/dir' or 
---input '/dir'
+```bash
+lookup -i '/path/to/wordfile/dir' 
+```
+or
+```bash
+lookup --input '/dir'
+```
 
 ## Output
 
 Output will be written to files in the default location ~/lookup/ or wherever specified by the config file ~/.lookup or by a command line option:
-
--o '/path/to/outputfile/dir' or 
---output '/dir'
+```bash
+lookup -o '/path/to/outputfile/dir' 
+```
+or
+```bash
+lookup --output '/dir'
+```
 
 ## Format
 
 The Output file will be html by default but can be set to plain text or mark down by the options
 
--f md    or
---format txt
+```bash
+lookup -f <format>
+```
+or
+```bash
+lookup --format <format>
+```
+where \<format> is md or txt
 
 ## Definitions
 
@@ -38,8 +62,10 @@ If any line in an input file starts with a '#' it will be treated as a comment a
 
 Each Item will be presented with its pronunciation, a list of the senses in which it is used with meanings, example sentences, antonyms and synonyms if available.  Any of these sections may be switched off by passing an appropriate option:
 
-  --no-meanings
-  --no-pronunciations
-  --no-examples
-  --no-synonyms
-  --no-antonyms
+```bash
+lookup --no-meanings
+lookup --no-pronunciations
+lookup --no-examples
+lookup --no-synonyms
+lookup --no-antonyms
+```
