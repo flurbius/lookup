@@ -3,6 +3,10 @@
 *.auth.*
 *.apikey.*
 
+#build artifacts
+dist/
+
+
 # Logs
 logs
 *.log

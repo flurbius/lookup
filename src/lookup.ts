@@ -47,32 +47,52 @@ export module dvsLookup {
             return false;
         }
     }
-    function coerceInputDirectory(val: string): string {
-        return inputDirectory = coerceDirectory(val, defaultInputDirectory);
-    }
-    function coerceOutputDirectory(val: string): string {
-        return outputDirectory = coerceDirectory(val, defaultOutputDirectory);
+    function coerceInputDirectoryOrFile(val: string): string {
+        if (!val) {
+            val = defaultInputDirectory;
+            console.log('no parameter supplied for --input option using default value: ' + defaultInputDirectory)
+        }
+        return inputDirectory = fileOrDirectory(val);
     }
 
-
-    function coerceDirectory(val: string, def: string): string {
+    function fileOrDirectory(dir: string): string {
         // take the first match that is a directory or a file
-        if (val) {
-            def = val;
+
+        if (objectAccessible(dir)) {
+            return path.join(dir);
         }
-        if (objectAccessible(def)) {
-            return path.join(def);
+        if (objectAccessible(path.join('~', dir))) {
+            return path.join('~', dir);
         }
-        if (objectAccessible(path.join('~', def))) {
-            return path.join('~', def);
-        }
-        if (objectAccessible(path.join(__dirname, def))) {
-            return path.join(__dirname, def);
+        if (objectAccessible(path.join(__dirname, dir))) {
+            return path.join(__dirname, dir);
         }
         return __dirname;
         // const msg = 'Error: No words found:\n You must specify an input file (--input-file <filename>, or provide the default file words.txt in '
         //     + path.join(__dirname, 'in') + ' or ' + path.join('~', 'in') + ' or ' + path.join('~');
         // throw (new Error(msg));
+    }
+
+    function coerceOutputDirectory(val: string): string {
+        if (!val) {
+            val = defaultOutputDirectory;
+            console.log('no parameter supplied for --output option using default value: ' + defaultOutputDirectory)
+        }
+        return outputDirectory = directory(val);
+    }
+    function directory(dir: string): string{
+        // take the first match that is a directory
+
+        if (isDirectory(dir)) {
+            return path.join(dir);
+        }
+        if (isDirectory(path.join('~', dir))) {
+            return path.join('~', dir);
+        }
+        if (isDirectory(path.join(__dirname, dir))) {
+            return path.join(__dirname, dir);
+        }
+        return __dirname;
     }
 
     function coerceFormat(val: string) {
@@ -88,13 +108,12 @@ export module dvsLookup {
         console.log('Files: ' + files.join());
     }
 
-    const lookup = new com.Command;
-
-    lookup
+    com
         .version(module.exports.version)
+        .command('*')
         .option('-i, --input <dir>',
-            'A directory containing one or more files that contain the words to be defined.',
-            coerceInputDirectory,
+            'A directory containing one or more files that contain the words to be defined, or a single file',
+            coerceInputDirectoryOrFile,
             defaultInputDirectory)
         .option('-o, --output <dir>',
             'A directory where the files containing the definitions will be written to.',
@@ -105,14 +124,13 @@ export module dvsLookup {
             coerceFormat,
             defaultFormat)
             .option('-P, --no-pronunciations', 'Do not include pronunciations')
-            .option('-D, --no-meanings', 'Do not include word definitions')
+            .option('-D, --no-definitions', 'Do not include word definitions')
             .option('-E, --no-examples', 'Do not include example sentences')
             .option('-A, --no-antonyms', 'Do not include antonyms')
             .option('-S, --no-synonyms', 'Do not include synonyms')
-            .arguments('[options]')
         .action(function () {
             if (!inputDirectory){
-                coerceInputDirectory(lookup.input); //? why not lookup.opts['input']
+                coerceInputDirectoryOrFile(com.input); //? why not lookup.opts['input']
             }
             if (!outputDirectory){
                 coerceOutputDirectory(com.output);
