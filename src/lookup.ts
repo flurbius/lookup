@@ -23,8 +23,8 @@ export module dvsLookup {
     const defaultFormat = Format.html;
     const defaultSuffix = 'defs'
 
-    let inputDirectory: string;
-    let outputDirectory: string;
+    let inputDirectory: string = '';
+    let outputDirectory: string ='';
     let format: Format | null = null;
     let files: string[];
 
@@ -108,9 +108,9 @@ export module dvsLookup {
         console.log('Files: ' + files.join());
     }
 
-    com
+    const lookup = com.command('*');
+    lookup
         .version(module.exports.version)
-        .command('*')
         .option('-i, --input <dir>',
             'A directory containing one or more files that contain the words to be defined, or a single file',
             coerceInputDirectoryOrFile,
@@ -128,29 +128,10 @@ export module dvsLookup {
             .option('-E, --no-examples', 'Do not include example sentences')
             .option('-A, --no-antonyms', 'Do not include antonyms')
             .option('-S, --no-synonyms', 'Do not include synonyms')
+        
         .action(function () {
-            if (!inputDirectory){
-                coerceInputDirectoryOrFile(com.input); //? why not lookup.opts['input']
-            }
-            if (!outputDirectory){
-                coerceOutputDirectory(com.output);
-            }
-            if (!format){
-                coerceFormat(com.format);
-            }
+            console.log('action called');
 
-            // read all text files in dir
-            if (isDirectory(inputDirectory)){
-                files = fs.readdirSync(inputDirectory);
-                files.map((f, i, entries) => {
-                    if (f.endsWith('txt')){
-                        return path.join(inputDirectory, f);
-                    }
-                });
-            } else {
-                files = [ inputDirectory ];
-            }
-            logDebugInfo();
 
 
 
@@ -165,4 +146,27 @@ export module dvsLookup {
             
         })
         .parse(process.argv);
+
+        if (''=== inputDirectory){
+            coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
+        }
+        if (''=== outputDirectory){
+            coerceOutputDirectory(lookup.output);
+        }
+        if (!format){
+            coerceFormat(lookup.format);
+        }
+
+        // read all text files in dir
+        if (isDirectory(inputDirectory)){
+            files = fs.readdirSync(inputDirectory);
+            files.map((f, i, entries) => {
+                if (f.endsWith('txt')){
+                    return path.join(inputDirectory, f);
+                }
+            });
+        } else {
+            files = [ inputDirectory ];
+        }
+        logDebugInfo();
 }

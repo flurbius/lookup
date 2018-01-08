@@ -7,18 +7,70 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Program no args",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program --version",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=lookup.txt",
-                "--format=txt",
-                "--no-definitions"
+                "--version"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program --help",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--help"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program --input",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--input=lookup"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program -i -o",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--input=/home/flurbius/lookup",
+                "--output=/home/flurbius/lookup"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
     ]
 }
