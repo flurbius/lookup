@@ -3,12 +3,14 @@ _Lookup a list of words in the OED and output the senses,meanings,synonyms and o
 
 ### Version 0.1.0
 
+```bash
   __________           .___ ________ Ⓒ
   \______   \ ____   __| _/ \______ \____________    ____   ____   ____  
    |       _// __ \ / __ |   |    |  \_  __ \__  \  / ___\ /  _ \ /    \ 
    |    |   \  ___// /_/ |   |    `   \  | \// __ \/ /_/  >  <_> )   |  \
    |____|_  /\___  >____ |  /_______  /__|  (____  |___  / \____/|___|  /
           \/     \/     \/          \/           \/_____/             \/ 
+```
 
 This project is a WIP.  At this stage it is not yet functional and cannot be used for any purpose.  This readme is a reflection of my goals and intents for this project.  A _future doc_ if you will.  If you have any comment please file it [under issues](https://github.com/flurbius/lookup/issues/).
 
@@ -79,4 +81,4 @@ lookup --no-examples
 lookup --no-synonyms
 lookup --no-antonyms
 ```
-![Red Dragon](http://github.com/flurbius/lookup/red-dragon.png)
+![Red Dragon](https://github.com/flurbius/lookup/blob/master/red-dragon.png)
