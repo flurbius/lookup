@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program no args",
+            "name": "Lookup no args",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "preLaunchTask": "tsc: build - tsconfig.json",
@@ -18,7 +18,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program --version",
+            "name": "Lookup --version",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
@@ -32,7 +32,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program --help",
+            "name": "Lookup --help",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
@@ -46,11 +46,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program --input",
+            "name": "Lookup dir-dir",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=lookup"
+                "--input=/home/flurbius/lookup",
+                "--output=/home/flurbius/lookup/output",
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -60,12 +61,14 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program -i -o",
+            "name": "Lookup in-file out create -f no",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup",
-                "--output=/home/flurbius/lookup"
+                "--input=/home/flurbius/lookup/adv-2018-01-15.txt",
+                "--output=/home/flurbius/output",
+                "--format=md",
+                "--no-synonyms"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [

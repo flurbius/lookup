@@ -4,29 +4,25 @@
 import './polyfills';
 import * as com from 'commander';
 import * as fs from 'fs';
-import * as _ from 'lodash';
-import * as sanitize from 'sanitize-filename';
+import { DefinitionFile, Phrase, Word, Sense, Meta, MetaType } from './definition-file';
+import { parseIso, format as dtfmt } from 'ts-date/locale/en';
 import * as path from 'path';
 
 var pkginfo = require('pkginfo')(module, 'name', 'description', 'version');
 
 export module dvsLookup {
 
-    enum Format {
-        html,
-        md,
-        txt
-    }
-
+    const lookup = new com.Command();
     const defaultInputDirectory = 'lookup';
     const defaultOutputDirectory = 'lookup';
-    const defaultFormat = Format.html;
-    const defaultSuffix = 'defs'
+    const defaultFormat = 'html';
+    const defaultSuffix = '.defs'
 
     let inputDirectory: string = '';
     let outputDirectory: string ='';
-    let format: Format | null = null;
-    let files: string[];
+    let format: string = '';
+    let files: (string | undefined)[];
+    let words: string[];
 
     
     function objectAccessible(dir: string): boolean {
@@ -34,7 +30,7 @@ export module dvsLookup {
             fs.accessSync(dir);
             return true;
         } catch (err) {
-            console.error('objectAccessible Rejected: ' + JSON.stringify(err));
+            console.error('objectAccessible Rejected: %o', err);
             return false;
         }
     }
@@ -43,14 +39,20 @@ export module dvsLookup {
         try {
             return fs.statSync(file).isDirectory();
         } catch (err) {
-            console.error('isDirectory result is negative: ' + JSON.stringify(err));
+            console.error('isDirectory result is negative: %o',JSON.stringify(err));
+        }
+        try {
+            fs.mkdirSync(file);
+            return fs.statSync(file).isDirectory();
+        } catch (err) {
+            console.error('couldnt create it either :-( %o',JSON.stringify(err));
             return false;
         }
     }
     function coerceInputDirectoryOrFile(val: string): string {
         if (!val) {
             val = defaultInputDirectory;
-            console.log('no parameter supplied for --input option using default value: ' + defaultInputDirectory)
+            console.error('no parameter supplied for --input option using default value: %s', defaultInputDirectory);
         }
         return inputDirectory = fileOrDirectory(val);
     }
@@ -67,16 +69,19 @@ export module dvsLookup {
         if (objectAccessible(path.join(__dirname, dir))) {
             return path.join(__dirname, dir);
         }
+        console.debug('fileOrDirectory: Could not use supplied value %s, using %s', dir, __dirname);
         return __dirname;
-        // const msg = 'Error: No words found:\n You must specify an input file (--input-file <filename>, or provide the default file words.txt in '
-        //     + path.join(__dirname, 'in') + ' or ' + path.join('~', 'in') + ' or ' + path.join('~');
-        // throw (new Error(msg));
     }
 
     function coerceOutputDirectory(val: string): string {
-        if (!val) {
-            val = defaultOutputDirectory;
-            console.log('no parameter supplied for --output option using default value: ' + defaultOutputDirectory)
+        if ('' === val || typeof(val)===undefined || !val) {
+            if ('' === inputDirectory){
+                val = defaultOutputDirectory;
+                console.log('no parameter supplied for --output option using default value %s', val);
+            } else {
+                val = inputDirectory;
+                console.log('no parameter supplied for --output option using input directory %s', val);
+            }
         }
         return outputDirectory = directory(val);
     }
@@ -92,60 +97,86 @@ export module dvsLookup {
         if (isDirectory(path.join(__dirname, dir))) {
             return path.join(__dirname, dir);
         }
+        console.debug('directory: Could not use supplied value %s, using %s', dir, __dirname);
         return __dirname;
     }
 
     function coerceFormat(val: string) {
-        if (val == 'md') return format = Format.md;
-        if (val == 'txt') return format = Format.txt;
+        if ('md' === val) return format = 'md';
+        if ('txt' === val) return format = 'txt';
+        if ('html' === val) return format = 'html';
+        console.error('coerceFormat: Unknown format (%s) using default (%s)', val, defaultFormat);
         return format = defaultFormat;
     }
     function logDebugInfo() {
-        console.log('In Dir: ' + inputDirectory);
-        console.log('Out Dir: ' + outputDirectory);
-        console.log('Format: ' + JSON.stringify(format));
-        console.log('# files: ' + files.length);
-        console.log('Files: ' + files.join());
+        if (isDirectory(inputDirectory)){
+            console.debug('In Dir: %s', inputDirectory);
+            console.debug('# files: %i', files.length);
+            console.dir('Files: %o', JSON.stringify(files));
+            } else {
+            console.debug('In File: %s', inputDirectory);
+        }
+        console.debug('Out Dir: %s', outputDirectory);
+        console.debug('Format: %s', format);
+        console.dir('Words: %o', JSON.stringify(words));
+        console.log('option pronunciations = %o', lookup.pronunciations);
+        console.log('option definitions = %o', lookup.definitions);
+        console.log('option examples = %o', lookup.examples);
+        console.log('option antonyms = %o', lookup.antonyms);
+        console.log('option synonyms = %o', lookup.synonyms);
     }
 
-    const lookup = com.command('*');
-    lookup
-        .version(module.exports.version)
-        .option('-i, --input <dir>',
-            'A directory containing one or more files that contain the words to be defined, or a single file',
-            coerceInputDirectoryOrFile,
-            defaultInputDirectory)
-        .option('-o, --output <dir>',
-            'A directory where the files containing the definitions will be written to.',
-            coerceOutputDirectory,
-            defaultOutputDirectory)
-        .option('-f, --format <format>',
-            'A format, the definitions will be output as html, txt or md',
-            coerceFormat,
-            defaultFormat)
-            .option('-P, --no-pronunciations', 'Do not include pronunciations')
-            .option('-D, --no-definitions', 'Do not include word definitions')
-            .option('-E, --no-examples', 'Do not include example sentences')
-            .option('-A, --no-antonyms', 'Do not include antonyms')
-            .option('-S, --no-synonyms', 'Do not include synonyms')
-        
-        .action(function () {
-            console.log('action called');
+    function getAsLines(file: string) : string[]{
+        return fs.readFileSync(file, { encoding: 'utf8', flag: 'r' })
+                .replace('\r\n', '\n')
+                .split('\n');  
+    }
+    const EXTENSION = 2;
+    const NAME = 1;
+    const DIRECTORY = 0;
 
+    function getFilenameParts(file:string):string[]{
+        const parts  = ['','',''];
+        const rp = fs.realpathSync(file);
+        parts[EXTENSION] = rp.slice(rp.lastIndexOf('.'));
+        parts[NAME] = rp.slice(rp.lastIndexOf('/'), rp.lastIndexOf('.'));
+        parts[DIRECTORY] = rp.slice(0,rp.lastIndexOf('/'));
+        return parts;
+    }
+    function getDate(item:string):string | null{
+        const d = parseIso(item); 
+        dtfmt(d, 'Do MMMM YYYY');
+        if (d) {
+            return d.toLocaleDateString();
+        } else {
+            return null;
+        }
+    }
 
+    lookup.version(module.exports.version)
+          .option('--input <dir>',
+          'A directory containing one or more files that contain the words to be defined, or a single file',
+          coerceInputDirectoryOrFile)
+          .option('--output <dir>',
+          'A directory where the files containing the definitions will be written to.',
+          coerceOutputDirectory)
+          .option('--format <format>',
+          'A format, the definitions will be output as html, txt or md',
+          coerceFormat)
+       .option('--no-pronunciations', 'Do not include pronunciations')
+       .option('--no-definitions', 'Do not include word definitions')
+       .option('--no-examples', 'Do not include example sentences')
+       .option('--no-antonyms', 'Do not include antonyms')
+       .option('--no-synonyms', 'Do not include synonyms')
+       .action(function () { console.log('action called'); });
 
+       console.dir('opts = %o', lookup.opts());
 
-//                let lines = fs.readFileSync(com.input).toString().replace(/\r\n/g, '\n').split('\n');
-            // if (words.length < 1) {
-            //     const msg = 'Error: No words found:\n You must specify an input file (--input-file <filename>, or provide the default file words.txt in '
-            //         + path.join(__dirname, 'in') + ' or ' + path.join('~', 'in') + ' or ' + path.join('~');
-            //     throw (new Error(msg));
-            // }
-
-
-            
-        })
-        .parse(process.argv);
+       lookup.parseOptions(process.argv);
+       lookup.parse(process.argv);
+       console.dir('argv-dir: %o', process.argv);
+       console.dir('stringified: %s', JSON.stringify(process.argv));
+       console.dir('opts = %o', lookup.opts());
 
         if (''=== inputDirectory){
             coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
@@ -160,13 +191,69 @@ export module dvsLookup {
         // read all text files in dir
         if (isDirectory(inputDirectory)){
             files = fs.readdirSync(inputDirectory);
-            files.map((f, i, entries) => {
-                if (f.endsWith('txt')){
-                    return path.join(inputDirectory, f);
+            files = files.map((f, i, entries) => {
+                if ((typeof(f) !== 'undefined') && (f.endsWith('txt'))){
+                  return path.join(inputDirectory, f);
                 }
             });
         } else {
             files = [ inputDirectory ];
         }
+        files.forEach(f => {
+            if (f && typeof(f) !== 'undefined' || '' !== f){
+                let fnparts = getFilenameParts(f as string);
+                const df = new DefinitionFile();
+                df.meta = Array<MetaType>();
+                df.name = fnparts[NAME] + defaultSuffix;
+                df.path = fnparts[DIRECTORY];
+                df.ext = fnparts[EXTENSION];
+                words = getAsLines(f as string);
+                for (let i = 0; i < words.length; i++){
+                    let s = words[i];
+                    if (s[0] == '#'){
+                        if (i>1){ //Meta data
+                            let meta = {
+                                i: i,
+                                data: s.slice(1)
+                            };
+                            df.meta.push(meta);
+
+                        } else {
+                            let d = getDate(s.slice(1));
+                            if (d){// Date
+                                df.date = d;
+                            } else { // class name
+                                df.class = s.slice(1);
+                            }
+                        }
+
+
+                    } else{
+                        let nw = {
+                            index: -1,
+                            data:''
+                        }
+                        let p = s.split('.');
+                        if (p.length > 1){
+                            // we have a number X.word
+                            nw.index = parseInt(p[0]);
+                            nw.data = p[1]; 
+                        }else {
+                           nw.index = i;
+                           nw.data = s;
+                        }
+                        //get the  def
+
+
+                    }
+                }// next word/line
+            }
+        }/* next file*/ );
+
+
+
+
+
+
         logDebugInfo();
 }
