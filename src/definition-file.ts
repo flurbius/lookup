@@ -37,12 +37,8 @@ export class MetaType implements Meta {
         this.i = i;
         this.data = d; 
     }
-
 }
 export class DefinitionFile{
-    constructor(){
-
-    }
     path:string;
     name:string;
     ext: string;
