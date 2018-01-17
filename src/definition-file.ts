@@ -1,33 +1,34 @@
 import { Array } from "core-js/library/web/timers";
 
-// Sense represents the way a word is used
-// properties for its meaning, category(noun, verb etc)
-// and sets of example sentences, antonyms and synonyms
-export class Sense{
-    index:number;
-    cat:string;
-    means: string;
+export class Entry{
+    index: number;
+    text: string;
+    category: string;
+    explain: string;
     examples: string[]=[];
-    antonyms: string[]=[];
     synonyms: string[]=[];
+    antonyms: string[]=[];
 }
-
-export class Word{
-    index:number;
-    word:string;
-    pron:string;
-    senses: Sense[]=[];
-}
-export class Phrase{
-    index:number;
-    word: string;
+export abstract class Definition{
+    abstract type: string;
+    index: number;
+    lang: string;
+    text: string;
+    pron: string;
     use: string;
     origin: string;
-    examples: string[] = [];
+    entries: Entry[]=[];
 }
-export interface Meta{
+
+export class Word extends Definition{
+    readonly type='WORD';
+}
+export class Phrase extends Definition{
+    readonly type='PHRASE';
+}
+export class Section{
     i:number;
-    data:string;
+    title:string;
 }
 
 export class DefinitionFile{
@@ -36,6 +37,6 @@ export class DefinitionFile{
     ext: string;
     class:string;
     date:string;
-    meta:Meta[] = [];
-    definitions:(Word | Phrase)[] = [];
+    sections:Section[] = [];
+    definitions:(Definition)[] = [];
 }

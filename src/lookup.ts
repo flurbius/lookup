@@ -7,18 +7,17 @@ import * as path from 'path';
 import * as com from 'commander';
 import { parseIso, format as dtfmt } from 'ts-date/locale/en';
 var pkginfo = require('pkginfo')(module, 'name', 'description', 'version');
-//import { name, despription, version } from '../pkginfo';
 
 import './polyfills';
 import { 
     DefinitionFile, 
     Phrase, 
     Word, 
-    Sense, 
-    Meta 
+    Entry,
+    Section, 
+    Definition
 } from './definition-file';
-
-import * as oed from './dictionary/oed-service';
+import { Dictionary } from './dictionary';
 
 export module dvsLookup {
 
@@ -210,6 +209,7 @@ export module dvsLookup {
         files = [ inputDirectory,  ];
     }
     logIODebugInfo(); /* DEBUGGING INFO   */
+    let output: DefinitionFile[] = [];
     files.forEach(f => {
         if (f && typeof(f) !== 'undefined' || '' !== f){
             let defs = new DefinitionFile();
@@ -219,47 +219,50 @@ export module dvsLookup {
             defs.ext = format;
             let lines = getAsLines(f as string);
             for (let i = 0; i < lines.length; i++){
-                let s = lines[i];
-                if (s==='' || !s || s.length<1 || typeof(s)==='undefined'){
+                let l = lines[i];
+                if (l==='' || !l || l.length<1 || typeof(l)==='undefined'){
                     continue;
                 }
-                if (s[0] == '#'){  //# means the rest is date, class or meta
-                    s = s.slice(s.lastIndexOf('#')+1).trim();  //TODO replace with regex
+                if (l[0] == '#'){  //# means the rest is date, class or meta
+                    l = l.slice(l.lastIndexOf('#')+1).trim();  //TODO replace with regex
                     if (i>1){ //Meta data
-                        defs.meta.push({ 
+                        defs.sections.push({ 
                             i: i, 
-                            data:s 
+                            title:l 
                         });
                     } else {
-                        let d = getDate(s);
+                        let d = getDate(l);
                         if (d){// Date
                             defs.date = d;
                         } else { // class name
-                            defs.class = s;
+                            defs.class = l;
                         }
                     }
                 } else{ // its a word or phrase
-                    let wp: (Word | Phrase);
-                    let p = s.split('.');
+                    let wp: Definition;
+                    let p = l.split('.');
                     let index = -1;  // an index  -1 means assign next sequential but if
                     if (p.length > 1){ //there is a number in front - use it
                         index = parseInt(p[0]);
-                        s = p[1].trim(); 
+                        l = p[1].trim(); 
                     }else {
-                        s = s.trim();
+                        l = l.trim();
                     }
-                    if (s.search(' ')<1){
+                    if (l.search(' ')<1){
                         wp = new Word();
                     } else {
                         wp = new Phrase();
                     }
                     wp.index = index;
-                    wp.word = s;
+                    wp.text = l;
                     defs.definitions.push(wp);
                 }
             }// next word/line
 
             logWordDebugInfo(defs.name, lines);
+            output.push(Dictionary.GetDefinitions(defs));
         }/* next file*/ 
     });
+    // Pass defs to Dictionary
+    // Pass defs to outputter
 }
