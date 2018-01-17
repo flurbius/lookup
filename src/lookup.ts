@@ -200,18 +200,19 @@ export module dvsLookup {
     // read all text files in dir
     if (isDirectory(inputDirectory)){
         files = fs.readdirSync(inputDirectory)
-                  .map((f, i, entries) => {
+                  .filter((f, i, entries) => {
                       if ((typeof(f) !== 'undefined') && (f.endsWith('txt'))){
-                          return path.join(inputDirectory, f);
+                          return true;
                       }
-                  });
+                  })
+                  .map((f,i,entries)=> {return path.join(inputDirectory, f)})
     } else {
         files = [ inputDirectory,  ];
     }
     logIODebugInfo(); /* DEBUGGING INFO   */
     let output: DefinitionFile[] = [];
     files.forEach(f => {
-        if (f && typeof(f) !== 'undefined' || '' !== f){
+        if (f && typeof(f) !== 'undefined' && '' !== f){
             let defs = new DefinitionFile();
             let fnparts = getFilenameParts(f as string);
             defs.name = fnparts[NAME] + defaultSuffix;
