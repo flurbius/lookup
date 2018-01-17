@@ -1,42 +1,40 @@
-import { Array } from "core-js/library/web/timers";
+//import { Array } from "core-js/library/web/timers";
 
-export class Entry{
+export class Entry {
     index: number;
-    text: string;
     category: string;
-    explain: string;
-    examples: string[]=[];
-    synonyms: string[]=[];
-    antonyms: string[]=[];
+    examples: string[] =[];
+    meaning: string[] = [];
+    synonyms: string[] = [];
+    antonyms: string[] = [];
 }
-export abstract class Definition{
+export abstract class Definition {
     abstract type: string;
     index: number;
-    lang: string;
     text: string;
     pron: string;
-    use: string;
+    link: string;
     origin: string;
-    entries: Entry[]=[];
+    entries: Entry[] = [];
 }
 
-export class Word extends Definition{
-    readonly type='WORD';
+export class Word extends Definition {
+    readonly type = 'WORD';
 }
-export class Phrase extends Definition{
-    readonly type='PHRASE';
+export class Phrase extends Definition {
+    readonly type = 'PHRASE';
 }
-export class Section{
-    i:number;
-    title:string;
+export class Section {
+    i: number;
+    title: string;
 }
 
-export class DefinitionFile{
-    path:string;
-    name:string;
+export class DefinitionFile {
+    path: string;
+    name: string;
     ext: string;
-    class:string;
-    date:string;
-    sections:Section[] = [];
-    definitions:(Definition)[] = [];
+    class: string;
+    date: string;
+    sections: Section[] = [];
+    definitions: (Definition)[] = [];
 }

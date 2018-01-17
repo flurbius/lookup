@@ -261,7 +261,7 @@ export module dvsLookup {
             }// next word/line
 
             logWordDebugInfo(defs.name, lines);
-            output.push(Dictionary.GetDefinitions(defs));
+            output.push(Dictionary.GetDefinitions(JSON.parse(JSON.stringify(defs))));
         }/* next file*/ 
     });
     // Pass defs to Dictionary
