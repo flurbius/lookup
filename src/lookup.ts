@@ -209,7 +209,7 @@ export module dvsLookup {
     } else {
         files = [ inputDirectory,  ];
     }
-    logIODebugInfo(); /* DEBUGGING INFO   */
+    //logIODebugInfo(); /* DEBUGGING INFO   */
     let output: DefinitionFile[] = [];
     files.forEach(f => {
         if (f && typeof(f) !== 'undefined' && '' !== f){
@@ -217,7 +217,7 @@ export module dvsLookup {
             let fnparts = getFilenameParts(f as string);
             defs.name = fnparts[NAME] + defaultSuffix;
             defs.path = fnparts[DIRECTORY];
-            defs.ext = format;
+            defs.ext = '.' + format;
             let lines = getAsLines(f as string);
             for (let i = 0; i < lines.length; i++){
                 let l = lines[i];
@@ -260,9 +260,15 @@ export module dvsLookup {
                 }
             }// next word/line
 
-            logWordDebugInfo(defs.name, lines);
-            output.push(Dictionary.GetDefinitions(JSON.parse(JSON.stringify(defs))));
+            // logWordDebugInfo(defs.name, lines);
+            output.push(Dictionary.DefineWords(JSON.parse(JSON.stringify(defs))));
+
         }/* next file*/ 
+        for (let i=0;i<output.length;i++){
+            let file = JSON.stringify(output[i]);
+            let can = path.join(output[i].path, output[i].name + output[i].ext + '.json');
+            fs.writeFileSync(can,file);
+        }
     });
     // Pass defs to Dictionary
     // Pass defs to outputter

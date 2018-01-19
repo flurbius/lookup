@@ -14,10 +14,10 @@ import {
 export class Dictionary{
     static service = new DictionaryProvider('OED');
     
-    static GetDefinitions(input:DefinitionFile):DefinitionFile{
+    static DefineWords(input:DefinitionFile):DefinitionFile{
         input.definitions.forEach((d, i, defs)=>{
-            this.service.getEntry(d.text)
-            .then((json)=>{
+            this.service.getUSDefinitionsExamples(d.text)
+            .then((json:any)=>{
                 console.log(JSON.stringify(json));
                 d.pron = this.getPronunciation(json);
                 d.origin = this.getOrigin(json);
@@ -34,7 +34,7 @@ export class Dictionary{
 
                 
             })
-            .catch((err)=>{
+            .catch((err:any)=>{
                 console.error(err);
             });
         })
