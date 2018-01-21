@@ -1,53 +1,55 @@
+import * as oed from './oed-config';
 import * as axios from 'axios';
 
-import * as oed from './oed-config';
-
-export class DictionaryProvider {
-    constructor(service: string) {
-
-    }
-    private ax = axios.default.create({
-        baseURL: oed.oedUrl,
-        headers: oed.headers,
-        maxContentLength: oed.maxContentLength
-    });
+export class OED {
+    private static ax = axios.default.create(oed.config);
     
-    private callAPI(endpoint: string): Promise<any> {
+    static queryDictionary(op: string, word: string): Promise<any> {
         return new Promise((resolve, reject) => {
+            if (!word) {
+                reject('No word supplied');
+            }
+            
+            let endpoint = oed.definitions.replace('{word}', word.toLowerCase());
+            if (op=='SYNONYMS'){
+                endpoint = oed.synonyms.replace('{word}', word.toLowerCase());
+            } 
+
             console.log('Sending request %s at %s', endpoint, new Date().toTimeString());
+
             this.ax.get(endpoint)
                 .then((response) => {
-                    console.log('received response %s at %s\n%s', endpoint, new Date().toTimeString(), JSON.stringify(response));
+                    console.log('received response %s at %s', endpoint, new Date().toTimeString());
                     if (response.status !== 200) {
                         reject(response.statusText);
                     }
                     resolve(response.data);
                 })
                 .catch((err) => {
-                    console.error('Error for %s at %s\n%s', endpoint, new Date().toTimeString(), err);
+                    console.error('Error for %s at %s', endpoint, new Date().toTimeString());
+                    this.handleError(err);
                     reject(err);
                 });
         });
     }
-
-    getUSDefinitionsExamples(word: string): Promise<any> {
-        if (!word) {
-            return new Promise((resolve, reject) => {
-                reject('No word supplied');
-            });
+    
+    private static handleError(error: axios.AxiosError) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log('No response received');
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
         }
-        const myUrl = oed.endpointDefinitionsExamplesUS.replace('{word}', word.toLowerCase());
-        return this.callAPI(myUrl);
-    }
-
-    getSynonymsAntonyms(word: string): Promise<any> {
-        if (!word) {
-            return new Promise((resolve, reject) => {
-                reject('No word supplied');
-            });
-        }
-        const myUrl = oed.endpointSynonymsAntonyms.replace('{word}', word.toLowerCase());
-        return this.callAPI(myUrl);
+        console.log(error.config);
     }
 }
-

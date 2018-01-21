@@ -1,4 +1,4 @@
-#!/usr/bin/env Node
+#!/usr/bin/node
 /* lookup.ts  */
 
 import * as fs from 'fs';
@@ -84,10 +84,8 @@ export module dvsLookup {
         if ('' === val || typeof(val)===undefined || !val) {
             if ('' === inputDirectory){
                 val = defaultOutputDirectory;
-                console.log('no parameter supplied for --output option using default value %s', val);
             } else {
                 val = inputDirectory;
-                console.log('no parameter supplied for --output option using input directory %s', val);
             }
         }
         return outputDirectory = directory(val);
@@ -109,31 +107,14 @@ export module dvsLookup {
     }
 
     function coerceFormat(val: string) {
-        if ('md' === val) return format = 'md';
-        if ('txt' === val) return format = 'txt';
-        if ('html' === val) return format = 'html';
-        console.error('coerceFormat: Unknown format (%s) using default (%s)', val, defaultFormat);
-        return format = defaultFormat;
-    }
-    function logIODebugInfo() {
-        if (isDirectory(inputDirectory)){
-            console.debug('In Dir: %s', inputDirectory);
-            console.debug('# files: %i', files.length);
-            console.dir('Files: %o', JSON.stringify(files));
-            } else {
-            console.debug('In File: %s', inputDirectory);
+        switch (val) {
+            case 'md':
+            case 'txt':
+            case 'html':
+                return format = val;
+            default:
+                return val = format = defaultFormat;
         }
-        console.debug('Out Dir: %s', outputDirectory);
-        console.debug('Format: %s', format);
-        console.log('option pronunciations = %o', lookup.pronunciations);
-        console.log('option definitions = %o', lookup.definitions);
-        console.log('option examples = %o', lookup.examples);
-        console.log('option antonyms = %o', lookup.antonyms);
-        console.log('option synonyms = %o', lookup.synonyms);
-    }
-    function logWordDebugInfo(f: string, w: string[]) {
-        console.debug('File: %s', f);
-        console.dir('Words: %o', JSON.stringify(w));
     }
 
     function getAsLines(file: string) : string[]{
@@ -144,7 +125,6 @@ export module dvsLookup {
     const EXTENSION = 2;
     const NAME = 1;
     const DIRECTORY = 0;
-
     function getFilenameParts(file:string):string[]{
         const parts  = ['','',''];
         const rp = fs.realpathSync(file);
@@ -153,6 +133,7 @@ export module dvsLookup {
         parts[DIRECTORY] = rp.slice(0,rp.lastIndexOf('/'));
         return parts;
     }
+
     function getDate(item:string):string | null{
         const d = parseIso(item); 
         dtfmt(d, 'Do MMMM YYYY');
@@ -183,9 +164,6 @@ export module dvsLookup {
 
     lookup.parseOptions(process.argv);
     lookup.parse(process.argv);
-    console.dir('argv-dir: %o', process.argv);
-    console.dir('stringified: %s', JSON.stringify(process.argv));
-    console.dir('opts = %o', lookup.opts());
 
     if (''=== inputDirectory){
         coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
@@ -197,7 +175,7 @@ export module dvsLookup {
         coerceFormat(lookup.format);
     }
 
-    // read all text files in dir
+    // if we are dealing with a dir then populate the list of input files 
     if (isDirectory(inputDirectory)){
         files = fs.readdirSync(inputDirectory)
                   .filter((f, i, entries) => {
@@ -206,42 +184,43 @@ export module dvsLookup {
                       }
                   })
                   .map((f,i,entries)=> {return path.join(inputDirectory, f)})
-    } else {
-        files = [ inputDirectory,  ];
+    } else {  // otherwise it is just one file
+        files = [ inputDirectory ];
     }
     //logIODebugInfo(); /* DEBUGGING INFO   */
     let output: DefinitionFile[] = [];
     files.forEach(f => {
         if (f && typeof(f) !== 'undefined' && '' !== f){
-            let defs = new DefinitionFile();
-            let fnparts = getFilenameParts(f as string);
-            defs.name = fnparts[NAME] + defaultSuffix;
-            defs.path = fnparts[DIRECTORY];
-            defs.ext = '.' + format;
-            let lines = getAsLines(f as string);
+            let wordlist = new DefinitionFile();
+            wordlist.inputfile = f;
+            let fnparts = getFilenameParts(f);
+            wordlist.name = fnparts[NAME] + defaultSuffix;
+            wordlist.path = outputDirectory;
+            wordlist.ext = '.' + format;
+            let lines = getAsLines(f);
             for (let i = 0; i < lines.length; i++){
                 let l = lines[i];
-                if (l==='' || !l || l.length<1 || typeof(l)==='undefined'){
+                if ((l==='') || !l || (l.length<1)){
                     continue;
                 }
-                if (l[0] == '#'){  //# means the rest is date, class or meta
-                    l = l.slice(l.lastIndexOf('#')+1).trim();  //TODO replace with regex
-                    if (i>1){ //Meta data
-                        defs.sections.push({ 
+                if (l[0] == '#'){  //# means a comment
+                    l = l.slice(l.lastIndexOf('#')+1).trim();
+                    if (i<2){  //first two lines can be date or class name 
+                        let d = getDate(l);
+                        if (d){// Date
+                            wordlist.date = d;
+                        } else { // class name
+                            wordlist.class = l;
+                        }
+                    } else {  // other comments are section titles
+                        wordlist.sections.push({ 
                             i: i, 
                             title:l 
                         });
-                    } else {
-                        let d = getDate(l);
-                        if (d){// Date
-                            defs.date = d;
-                        } else { // class name
-                            defs.class = l;
-                        }
                     }
                 } else{ // its a word or phrase
                     let wp: Definition;
-                    let p = l.split('.');
+                    let p = l.split('.');  // if there is a . indicates the words are numbered
                     let index = -1;  // an index  -1 means assign next sequential but if
                     if (p.length > 1){ //there is a number in front - use it
                         index = parseInt(p[0]);
@@ -256,20 +235,19 @@ export module dvsLookup {
                     }
                     wp.index = index;
                     wp.text = l;
-                    defs.definitions.push(wp);
+                    wordlist.definitions.push(wp);
                 }
             }// next word/line
 
-            // logWordDebugInfo(defs.name, lines);
-            output.push(Dictionary.DefineWords(JSON.parse(JSON.stringify(defs))));
-
+            Dictionary.DefineWords(wordlist)
+            .then((defs)=>{
+                let out = JSON.stringify(defs);
+                let can = path.join(defs.path, defs.name + defs.ext + '.json');
+                fs.writeFileSync(can,out);
+            })
+            .catch((err)=>{
+                console.error('Error getting definitions for file %s')
+            });
         }/* next file*/ 
-        for (let i=0;i<output.length;i++){
-            let file = JSON.stringify(output[i]);
-            let can = path.join(output[i].path, output[i].name + output[i].ext + '.json');
-            fs.writeFileSync(can,file);
-        }
     });
-    // Pass defs to Dictionary
-    // Pass defs to outputter
 }

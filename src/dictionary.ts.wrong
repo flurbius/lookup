@@ -7,33 +7,33 @@ import {
     Entry
 } from "./definition-file";
 
-import { OED } from './OED/oed-service';
+import { DictionaryProvider } from './OED/oed-service';
+import { assert } from 'console';
 
 export class Dictionary {
-    static async DefineWords(input: DefinitionFile): Promise<DefinitionFile> {
+    private static service = new DictionaryProvider('OED');
+
+    static DefineWords(input: DefinitionFile): DefinitionFile {
         for (let i = 0; i < input.definitions.length; i++) {
-            await this.getMeanings(input.definitions[i])
-            .then(await this.getSynonyms)
-            .then((d) => {
-                input.definitions[i] = d;
-            })
-            .catch((err)=>{
-                input.definitions[i].origin = 'Error retrieving definition'; 
-            });
+            let d = input.definitions[i];
+            d = this.getMeaningsExamples(i, d);
+            if (d && d.type == 'WORD') {
+                d = this.getSynonymsAntonyms(i, d);
+            }
+            input.definitions[i] = d;
+            this.causeDelay(1000);
         }
         return input;
     }
-    private static async getMeanings(d: Definition): Promise<Definition> {
-        await OED.queryDictionary('DEFINITION', d.text)
+    private static getMeaningsExamples(i: number, d: Definition): Definition {
+        Dictionary.service.getUSDefinitionsExamples(d.text)
             .then((json) => {
                 d.pron = Dictionary.getPronunciation(json);
                 d.origin = Dictionary.getOrigin(json);
                 d.link = Dictionary.getPronunciationLink(json);
                 let cats = Dictionary.extractCategories(json);
                 for (let j = 0; j < cats.length; j++) {
-                    if (typeof (d.entries[j]) === 'undefined') {
-                        d.entries[j] = new Entry();
-                    }
+                    d.entries[j] = new Entry();
                     d.entries[j].index = j + 1;
                     d.entries[j].category = Dictionary.getCategoryName(cats[j]);
                     d.entries[j].meaning = Dictionary.extractDefinitions(cats[j]);
@@ -42,35 +42,30 @@ export class Dictionary {
             })
             .catch((err) => {
                 console.error('Error retrieving definitions %s\n%s', d.text, err);
+                d.pron = err.toString();
+                return false;
             });
         return d;
     }
-
-    private static async getSynonyms(d: Definition): Promise<Definition> {
-        if (d.type == 'PHRASE') {
-            return d;
-        }
-        await OED.queryDictionary('SYNONYMS', d.text)
+    private static getSynonymsAntonyms(i: number, d: Definition): Definition {
+        Dictionary.service.getSynonymsAntonyms(d.text)
             .then((json) => {
                 let cats = Dictionary.extractCategories(json);
                 for (let j = 0; j < cats.length; j++) {
-                    if (typeof (d.entries[j]) === 'undefined') {
-                        d.entries[j] = new Entry();
-                        d.entries[j].index = j + 1;
-                        d.entries[j].category = Dictionary.getCategoryName(cats[j]);
-                        d.entries[j].examples = Dictionary.extractExamples(cats[j]);
-                        console.error('Error unexpected missing entry for %s : %s', d.text, d.entries[j].category);
-                    }
+                    assert(d.entries);
+                    assert(d.entries[j].index = j + 1);
+                    assert(d.entries[j].category = Dictionary.getCategoryName(cats[j]));
                     d.entries[j].synonyms = Dictionary.extractSynonyms(cats[j]);
                     d.entries[j].antonyms = Dictionary.extractAntonyms(cats[j]);
                 }
             })
             .catch((err) => {
                 console.error('Error retrieving synonyms %s\n%s', d.text, err);
+                d.pron = err.toString();
+                return false;
             });
         return d;
     }
-
     private static causeDelay(ms: number): void {
         let w = new Date().getTime() + 1000;
         let n = 0;

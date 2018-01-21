@@ -8,6 +8,7 @@ export class Entry {
     synonyms: string[] = [];
     antonyms: string[] = [];
 }
+
 export abstract class Definition {
     abstract type: string;
     index: number;
@@ -30,6 +31,7 @@ export class Section {
 }
 
 export class DefinitionFile {
+    inputfile: string;
     path: string;
     name: string;
     ext: string;

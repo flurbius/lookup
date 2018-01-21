@@ -61,14 +61,13 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup in-file out create -f no",
+            "name": "Lookup 1 file",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/adv-2018-01-15.txt",
-                "--output=/home/flurbius/output",
-                "--format=md",
-                "--no-synonyms"
+                "--input=/home/flurbius/lookup/test.txt",
+                "--output=/home/flurbius/lookup/output/",
+                "--format=md"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
