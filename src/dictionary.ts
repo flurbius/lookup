@@ -26,16 +26,16 @@ export class Dictionary {
     private static async getMeanings(d: Definition): Promise<Definition> {
         await OED.queryDictionary('DEFINITION', d.text)
             .then((json) => {
-                d.pron = Dictionary.getPronunciation(json);
-                d.origin = Dictionary.getOrigin(json);
-                d.link = Dictionary.getPronunciationLink(json);
+                d.pron = Dictionary.extractPronunciation(json);
+                d.origin = Dictionary.extractOrigin(json);
+                d.link = Dictionary.extractPronunciationLink(json);
                 let cats = Dictionary.extractCategories(json);
                 for (let j = 0; j < cats.length; j++) {
                     if (typeof (d.entries[j]) === 'undefined') {
                         d.entries[j] = new Entry();
                     }
                     d.entries[j].index = j + 1;
-                    d.entries[j].category = Dictionary.getCategoryName(cats[j]);
+                    d.entries[j].category = Dictionary.extractCategoryName(cats[j]);
                     d.entries[j].meaning = Dictionary.extractDefinitions(cats[j]);
                     d.entries[j].examples = Dictionary.extractExamples(cats[j]);
                 }
@@ -54,15 +54,18 @@ export class Dictionary {
             .then((json) => {
                 let cats = Dictionary.extractCategories(json);
                 for (let j = 0; j < cats.length; j++) {
-                    if (typeof (d.entries[j]) === 'undefined') {
-                        d.entries[j] = new Entry();
-                        d.entries[j].index = j + 1;
-                        d.entries[j].category = Dictionary.getCategoryName(cats[j]);
-                        d.entries[j].examples = Dictionary.extractExamples(cats[j]);
-                        console.error('Error unexpected missing entry for %s : %s', d.text, d.entries[j].category);
+                    let n = Dictionary.extractCategoryName(cats[j]);
+                    let k = d.entries.findIndex((e, i) => { return e.category===n });
+                    if (k < 0) { // this should only happen if there are antonyms/synonyms for a category that doesnt have a meaning
+                        k = d.entries.length;
+                        d.entries[k] = new Entry();
+                        d.entries[k].index = k + 1;
+                        d.entries[k].category = n;
+                        d.entries[k].examples = Dictionary.extractExamples(cats[j]);
+                        console.error('Error unexpected missing entry for %s : %s', d.text, n);
                     }
-                    d.entries[j].synonyms = Dictionary.extractSynonyms(cats[j]);
-                    d.entries[j].antonyms = Dictionary.extractAntonyms(cats[j]);
+                    d.entries[k].synonyms = Dictionary.extractSynonyms(cats[j]);
+                    d.entries[k].antonyms = Dictionary.extractAntonyms(cats[j]);
                 }
             })
             .catch((err) => {
@@ -76,18 +79,21 @@ export class Dictionary {
         let n = 0;
         while (w > n) { n = new Date().getTime() }
     }
-    private static returnOneJsonValue(json: any, path: string): string {
+    
+    private static returnOneString(json: any, path: string): string {
         let p = jp.query(json, path);
-        if (p.length < 1) {
-            return '';
+        if (p.length===1){
+            return p[0].toString();
         }
-        return p[0].toString();
+        if (p.length > 1) {
+            console.log('unexpected extra data using %s', path);
+            return p[0].toString();
+        }
+        console.log('No data found using %s', path);
+        return '';
     }
-    private static returnArray(json: any, path: string): any {
-        let p = jp.query(json, path);
-        return p;
-    }
-    private static returnArrayOfStrings(json: any, path: string): any {
+
+    private static returnArrayOfStrings(json: any, path: string): string[] {
         let oo = jp.query(json, path);
         let s: string[] = [];
         for (let n = 0; n < oo.length; n++) {
@@ -95,32 +101,35 @@ export class Dictionary {
         }
         return s;
     }
-    private static getOrigin(json: any): string {
-        return this.returnOneJsonValue(json, '$..etymologies[0]');
+    
+    private static extractOrigin(json: any): string {
+        return this.returnOneString(json, '$..etymologies[0]');
     }
-    private static getPronunciation(json: any): string {
-        return this.returnOneJsonValue(json, '$..pronunciations[0].phoneticSpelling');
+    private static extractPronunciation(json: any): string {
+        return this.returnOneString(json, '$..pronunciations[0].phoneticSpelling');
     }
-    private static getPronunciationLink(json: any): string {
-        return this.returnOneJsonValue(json, '$..pronunciations[0].audioFile');
+    private static extractPronunciationLink(json: any): string {
+        return this.returnOneString(json, '$..pronunciations[0].audioFile');
     }
-    private static extractDefinitions(json: any): any {
+    
+    private static extractCategories(json: any): any[] {
+        return jp.query(json, '$..lexicalEntries[*]');
+    }
+    // the following should be called with one of the entries from the array returned by the previous method
+    private static extractCategoryName(json: any): string {
+        return this.returnOneString(json, '$..lexicalCategory');
+    }
+    private static extractDefinitions(json: any): string[] {
         return this.returnArrayOfStrings(json, '$..definitions[*]');
     }
-    private static extractExamples(json: any): any {
+    private static extractExamples(json: any): string[] {
         return this.returnArrayOfStrings(json, '$..examples[*].text');
     }
-    private static extractCategories(json: any): any {
-        return this.returnArray(json, '$..lexicalEntries[*]');
+    private static extractSynonyms(json: any): string[] {
+        return this.returnArrayOfStrings(json, '$..synonyms[*].text');
     }
-    private static getCategoryName(json: any): string {
-        return this.returnOneJsonValue(json, '$..lexicalCategory');
-    }
-    private static extractSynonyms(json: any): any {
-        return this.returnArrayOfStrings(json, '$..synonyms[*]');
-    }
-    private static extractAntonyms(json: any): any {
-        return this.returnArrayOfStrings(json, '$..antonyms[*]');
+    private static extractAntonyms(json: any): string[] {
+        return this.returnArrayOfStrings(json, '$..antonyms[*].text');
     }
 
 }

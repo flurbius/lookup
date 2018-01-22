@@ -18,6 +18,9 @@ import {
     Definition
 } from './definition-file';
 import { Dictionary } from './dictionary';
+import './json-format';
+import jsonFormat from './json-format';
+
 
 export module dvsLookup {
 
@@ -145,22 +148,22 @@ export module dvsLookup {
     }
 
     lookup.version(module.exports.version)
-        .command('*', 'Lookup a list of words and output their meanings etc')
-        .option('--input <dir>',
+        .option('-i,--input <dir>',
             'A directory containing one or more files that contain the words to be defined, or a single file',
             coerceInputDirectoryOrFile)
-        .option('--output <dir>',
+        .option('-o,--output <dir>',
             'A directory where the files containing the definitions will be written to.',
             coerceOutputDirectory)
-        .option('--format <format>',
+        .option('f,--format <format>',
             'A format, the definitions will be output as html, txt or md',
             coerceFormat)
-        .option('--no-pronunciations', 'Do not include pronunciations')
-        .option('--no-definitions', 'Do not include word definitions')
-        .option('--no-examples', 'Do not include example sentences')
-        .option('--no-antonyms', 'Do not include antonyms')
-        .option('--no-synonyms', 'Do not include synonyms')
-        .action(function () { console.log('action called'); });
+        // .option('--no-pronunciations', 'Do not include pronunciations')
+        // .option('--no-definitions', 'Do not include word definitions')
+        // .option('--no-examples', 'Do not include example sentences')
+        // .option('--no-antonyms', 'Do not include antonyms')
+        // .option('--no-synonyms', 'Do not include synonyms')
+        .command('*', 'Lookup a list of words and output their meanings etc')
+        .action(function () { console.log('action called'); })
 
     lookup.parseOptions(process.argv);
     lookup.parse(process.argv);
@@ -241,8 +244,8 @@ export module dvsLookup {
 
             Dictionary.DefineWords(wordlist)
             .then((defs)=>{
-                let out = JSON.stringify(defs);
-                let can = path.join(defs.path, defs.name + defs.ext + '.json');
+                let out = jsonFormat.diffy(defs);
+                let can = path.join(defs.path, defs.name + defs.ext + '.jso0..NMn');
                 fs.writeFileSync(can,out);
             })
             .catch((err)=>{

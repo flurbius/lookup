@@ -12,8 +12,8 @@ import * as  secret from './.secret';
             'app_key': secret.appkey
         },
         method: 'get',
-        maxContentLength: 50000,
-        timeout: 10000,
+        maxContentLength: 300000,
+        timeout: 15000,
         responseType: 'json'
     };
 
