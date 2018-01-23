@@ -18,8 +18,7 @@ import {
     Definition
 } from './definition-file';
 import { Dictionary } from './dictionary';
-import './json-format';
-import jsonFormat from './json-format';
+import { FileBuilder } from './file-builder';
 
 
 export module dvsLookup {
@@ -27,7 +26,7 @@ export module dvsLookup {
     const lookup = new com.Command();
     const defaultInputDirectory = 'lookup';
     const defaultOutputDirectory = 'lookup';
-    const defaultFormat = 'html';
+    const defaultFormat = 'json';
     const defaultSuffix = '.defs'
 
     let inputDirectory: string = '';
@@ -132,7 +131,7 @@ export module dvsLookup {
         const parts  = ['','',''];
         const rp = fs.realpathSync(file);
         parts[EXTENSION] = rp.slice(rp.lastIndexOf('.'));
-        parts[NAME] = rp.slice(rp.lastIndexOf('/'), rp.lastIndexOf('.'));
+        parts[NAME] = rp.slice(rp.lastIndexOf('/')+1, rp.lastIndexOf('.'));
         parts[DIRECTORY] = rp.slice(0,rp.lastIndexOf('/'));
         return parts;
     }
@@ -147,26 +146,89 @@ export module dvsLookup {
         }
     }
 
-    lookup.version(module.exports.version)
-        .option('-i,--input <dir>',
-            'A directory containing one or more files that contain the words to be defined, or a single file',
-            coerceInputDirectoryOrFile)
-        .option('-o,--output <dir>',
-            'A directory where the files containing the definitions will be written to.',
-            coerceOutputDirectory)
-        .option('f,--format <format>',
-            'A format, the definitions will be output as html, txt or md',
-            coerceFormat)
-        // .option('--no-pronunciations', 'Do not include pronunciations')
-        // .option('--no-definitions', 'Do not include word definitions')
-        // .option('--no-examples', 'Do not include example sentences')
-        // .option('--no-antonyms', 'Do not include antonyms')
-        // .option('--no-synonyms', 'Do not include synonyms')
-        .command('*', 'Lookup a list of words and output their meanings etc')
-        .action(function () { console.log('action called'); })
+    function buildWordlist(f: string): DefinitionFile{
+        let wordlist = new DefinitionFile();
+        wordlist.inputfile = f;
+        let fnparts = getFilenameParts(f);
+        wordlist.name = fnparts[NAME] + defaultSuffix;
+        wordlist.path = outputDirectory;
+        wordlist.ext = '.' + format;
+        let lines = getAsLines(f);
+        let item = 1;
+        for (let i = 0; i < lines.length; i++){
+            let l = lines[i];
+            if ((l==='') || !l || (l.length<1)){
+                continue;
+            }
+            if (l[0] == '#'){  //# means a comment
+                l = l.slice(l.lastIndexOf('#')+1).trim();
+                if (i<2){  //first two lines can be date or class name 
+                    let d = getDate(l);
+                    if (d){// Date
+                        wordlist.date = d;
+                    } else { // class name
+                        wordlist.class = l;
+                    }
+                } else {  // other comments are section titles
+                    wordlist.sections.push({ 
+                        i: i, 
+                        title:l 
+                    });
+                }
+            } else{ // its a word or phrase
+                let wp: Definition;
+                let index = item;
+                let p = l.split('.');  // if there is a . indicates the words are numbered
+                if (p.length > 1){ //there is a number in front - use it instead
+                    index = parseInt(p[0]);
+                    l = p[1].trim(); 
+                }
+                if (p.length < 2 || isNaN(index)) {
+                    index = item;
+                    item++;
+                    l = l.trim();
+                }
+                if (l.search(' ')<1){
+                    wp = new Word();
+                } else {
+                    wp = new Phrase();
+                }
+                wp.index = index;
+                wp.text = l;
+                wordlist.definitions.push(wp);
+            }
+        }
+        return wordlist;
+    }
 
+
+    /*
+    *Entry point
+    */
+    lookup.version("lookup version " + module.exports.version)
+        .option('-l, --list-format', 'Output information on the expected list format for --input files.')
+        .option('-i, --input <dir>',
+            'A directory containing one or more files with a .txt extension that contain the words to be defined, or a single file',
+            coerceInputDirectoryOrFile)
+        .option('-o, --output <dir>',
+            'A directory where the files containing the definitions will be written to, default is to write to the same directory as --input.',
+            coerceOutputDirectory)
+        .option('-f, --format <format>',
+            'A format, the definitions will be output as json, html, txt or md,\ndefault is json',
+            coerceFormat)
+        .option('-p, --no-pronunciations', 'Do not include pronunciations')
+        .option('-d, --no-definitions', 'Do not include word definitions')
+        .option('-e, --no-examples', 'Do not include example sentences')
+        .option('-a, --no-antonyms', 'Do not include antonyms')
+        .option('-s, --no-synonyms', 'Do not include synonyms')
+        .description('Look up the definitions of words, using an online dictionary, you may specify one or more files containing words to be looked up.  For information regarding the file format type "lookup --list-format.')
+        .arguments('[file] ...');
     lookup.parseOptions(process.argv);
     lookup.parse(process.argv);
+    if (lookup.listFormat){
+        console.log('Files must be like so ...');
+        process.exit(0);
+    }
 
     if (''=== inputDirectory){
         coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
@@ -194,59 +256,13 @@ export module dvsLookup {
     let output: DefinitionFile[] = [];
     files.forEach(f => {
         if (f && typeof(f) !== 'undefined' && '' !== f){
-            let wordlist = new DefinitionFile();
-            wordlist.inputfile = f;
-            let fnparts = getFilenameParts(f);
-            wordlist.name = fnparts[NAME] + defaultSuffix;
-            wordlist.path = outputDirectory;
-            wordlist.ext = '.' + format;
-            let lines = getAsLines(f);
-            for (let i = 0; i < lines.length; i++){
-                let l = lines[i];
-                if ((l==='') || !l || (l.length<1)){
-                    continue;
-                }
-                if (l[0] == '#'){  //# means a comment
-                    l = l.slice(l.lastIndexOf('#')+1).trim();
-                    if (i<2){  //first two lines can be date or class name 
-                        let d = getDate(l);
-                        if (d){// Date
-                            wordlist.date = d;
-                        } else { // class name
-                            wordlist.class = l;
-                        }
-                    } else {  // other comments are section titles
-                        wordlist.sections.push({ 
-                            i: i, 
-                            title:l 
-                        });
-                    }
-                } else{ // its a word or phrase
-                    let wp: Definition;
-                    let p = l.split('.');  // if there is a . indicates the words are numbered
-                    let index = -1;  // an index  -1 means assign next sequential but if
-                    if (p.length > 1){ //there is a number in front - use it
-                        index = parseInt(p[0]);
-                        l = p[1].trim(); 
-                    }else {
-                        l = l.trim();
-                    }
-                    if (l.search(' ')<1){
-                        wp = new Word();
-                    } else {
-                        wp = new Phrase();
-                    }
-                    wp.index = index;
-                    wp.text = l;
-                    wordlist.definitions.push(wp);
-                }
-            }// next word/line
-
+            let wordlist = buildWordlist(f);
             Dictionary.DefineWords(wordlist)
             .then((defs)=>{
-                let out = jsonFormat.diffy(defs);
-                let can = path.join(defs.path, defs.name + defs.ext + '.jso0..NMn');
+                let out = FileBuilder.create(format, wordlist);
+                let can = path.join(defs.path, defs.name + defs.ext);
                 fs.writeFileSync(can,out);
+                return defs;
             })
             .catch((err)=>{
                 console.error('Error getting definitions for file %s')
