@@ -1,14 +1,15 @@
 # **Advanced: 2018-01-15**
+### 1. good 
+_Origin: Old English gōd,  of Germanic origin; related to Dutch goed and German gut._  
+ 
+**Pronunciation: ɡʊd**
 
-# 1. good
+<audio text='Click here'>
+<source>http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3</source>
+</audio>
+[Audio](http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3)
 
-_Origin: Old English gōd,  of Germanic origin; related to Dutch goed and German gut._
-
-#Pronunciation: ɡʊd#
-
-[http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3](Audio link)
-
-## 1.1 Adjective
+#### 1.1 Adjective
   * Meaning:
    - that which is morally right; righteousness
    - benefit or advantage to someone or something
@@ -30,7 +31,7 @@ _Origin: Old English gōd,  of Germanic origin; related to Dutch goed and German
   * Antonyms
    - wickedness, disadvantage
 
-## 1.2 Noun
+#### 1.2 Noun
   * Meaning
    - that which is morally right; righteousness
    - benefit or advantage to someone or something
@@ -45,7 +46,7 @@ _Origin: Old English gōd,  of Germanic origin; related to Dutch goed and German
   * Antonyms
    - wickedness, disadvantage
 
-## 1.3 Adverb
+#### 1.3 Adverb
   * Meaning
    - Well
   * Examples
@@ -53,15 +54,15 @@ _Origin: Old English gōd,  of Germanic origin; related to Dutch goed and German
    - my mother could never cook this good
 ---
 
-# 2 Focus
+### 2 Focus
 
 _Origin: mid 17th century (as a term in geometry and physics): from Latin, literally ‘domestic hearth’_
 
-*Pronunciation: fəʊkəs*
+**Pronunciation: fəʊkəs**
 
 [Audio Link](http://audio.oxforddictionaries.com/en/mp3/focus_gb_1.mp3)
 
-## 2.1 Verb
+#### 2.1 Verb
   * Meaning
    - adapt to the prevailing level of light and become able to see clearly
    - cause (one's eyes) to focus

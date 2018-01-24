@@ -7,7 +7,7 @@ import {
     Entry
 } from "./definition-file";
 
-import { OED } from './OED/oed-service';
+import { OED } from './OED/OED';
 
 export class Dictionary {
     static async DefineWords(input: DefinitionFile): Promise<DefinitionFile> {

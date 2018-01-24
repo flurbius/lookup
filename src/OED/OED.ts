@@ -1,4 +1,4 @@
-import * as oed from './oed-config';
+import * as oed from './config';
 import * as axios from 'axios';
 
 export class OED {

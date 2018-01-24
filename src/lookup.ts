@@ -171,9 +171,10 @@ export module dvsLookup {
                     }
                 } else {  // other comments are section titles
                     wordlist.sections.push({ 
-                        i: i, 
+                        i: item, 
                         title:l 
                     });
+                    item++;
                 }
             } else{ // its a word or phrase
                 let wp: Definition;
@@ -185,9 +186,9 @@ export module dvsLookup {
                 }
                 if (p.length < 2 || isNaN(index)) {
                     index = item;
-                    item++;
                     l = l.trim();
                 }
+                item = index + 1;
                 if (l.search(' ')<1){
                     wp = new Word();
                 } else {
