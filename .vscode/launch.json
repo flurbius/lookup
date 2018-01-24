@@ -65,7 +65,7 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/test.txt",
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-24.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=md"
             ],
