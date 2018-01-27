@@ -1,3 +1,6 @@
+import * as os from 'os';
+import * as show from 'showdown'
+
 import {
     DefinitionFile,
     Definition,
@@ -5,7 +8,6 @@ import {
     Phrase,
     Entry
 } from "./definition-file";
-import * as os from 'os';
 import jsonFormat from './json-format';
 import * as formats from './formats';
 import { formatStrings, markdown, text } from "./formats";
@@ -82,12 +84,20 @@ export class FileBuilder {
         }
         defs.time = ((Date.now().valueOf() - defs.start) / 1000).toFixed(2);
         result.push(' ');
-        result.push(f.origin.replace('{ORIGIN}', 'This file was made with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'));
+        result.push(f.origin.replace('Origin: {ORIGIN}', 'This file was made with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'));
         result.push(f.divider2);
-        return result.join(os.EOL);
+        let payload = result.join(os.EOL);
+        if (format === 'html'){
+            const convert = new show.Converter();
+            
+            payload = convert.makeHtml(payload);
+        }
+        return payload;
+
+
     }
     private static addTo(result: string[], f: formatStrings, heading: string, items: string[]): string[] {
-        result.push(f.heading.replace('{HEADING}', heading));
+        result.push(f.heading.replace('{HEADING}', heading + ' (' + items.length.valueOf() + ')'));
         if (items.length < 12) {
             for (let l = 0; l < items.length; l++)
                 result.push(f.oneItem.replace('{ITEM}', items[l]));

@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
@@ -62,13 +63,45 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup 1 file",
+            "name": "1 file - txt",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
+                "--output=/home/flurbius/lookup/output/",
+                "--format=txt"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "1 file - md",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
                 "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=md"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "1 file - html",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
+                "--output=/home/flurbius/lookup/output/",
+                "--format=html"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
