@@ -1,55 +1,47 @@
 import * as oed from './config';
 import * as axios from 'axios';
+import { Log } from '../log';
+
 
 export class OED {
     private static ax = axios.default.create(oed.config);
-    
+
     static queryDictionary(op: string, word: string): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!word) {
                 reject('No word supplied');
             }
-            
-            let endpoint = oed.definitions.replace('{word}', word.toLowerCase());
-            if (op=='SYNONYMS'){
-                endpoint = oed.synonyms.replace('{word}', word.toLowerCase());
-            } 
 
-            console.log('Sending request %s at %s', endpoint, new Date().toTimeString());
+            let endpoint = oed.definitions.replace('{word}', word.toLowerCase());
+            if (op == 'SYNONYMS') {
+                endpoint = oed.synonyms.replace('{word}', word.toLowerCase());
+            }
+
+            Log.To.info('Sending request ' + endpoint);
 
             this.ax.get(endpoint)
                 .then((response) => {
-                    console.log('received response %s at %s', endpoint, new Date().toTimeString());
+                    Log.To.info('received response from ' + endpoint);
                     if (response.status !== 200) {
                         reject(response.statusText);
                     }
                     resolve(response.data);
                 })
                 .catch((err) => {
-                    console.error('Error for %s at %s', endpoint, new Date().toTimeString());
                     this.handleError(err);
                     reject(err);
                 });
         });
     }
-    
+
     private static handleError(error: axios.AxiosError) {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
+            Log.To.error(error, 'Bad response');
         } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log('No response received');
-          console.log(error.request);
+            Log.To.error(error, 'Bad request');
         } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
+            Log.To.error(error, 'Error before sending request');
         }
-        console.log(error.config);
+        Log.To.error(error);
     }
 }

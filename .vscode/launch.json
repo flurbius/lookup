@@ -52,6 +52,7 @@
             "args": [
                 "--input=/home/flurbius/lookup",
                 "--output=/home/flurbius/lookup/output",
+                "--format=md"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
@@ -65,7 +66,7 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-24.txt",
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=md"
             ],

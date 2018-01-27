@@ -3,23 +3,22 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-
 import * as com from 'commander';
 import { parseIso, format as dtfmt } from 'ts-date/locale/en';
 var pkginfo = require('pkginfo')(module, 'name', 'description', 'version');
 
 import './polyfills';
-import { 
-    DefinitionFile, 
-    Phrase, 
-    Word, 
+import {
+    DefinitionFile,
+    Phrase,
+    Word,
     Entry,
-    Section, 
+    Section,
     Definition
 } from './definition-file';
 import { Dictionary } from './dictionary';
 import { FileBuilder } from './file-builder';
-
+import {Log} from './log';
 
 export module dvsLookup {
 
@@ -30,16 +29,16 @@ export module dvsLookup {
     const defaultSuffix = '.defs'
 
     let inputDirectory: string = '';
-    let outputDirectory: string ='';
+    let outputDirectory: string = '';
     let format: string = '';
     let files: (string | undefined)[];
-   
+
     function objectAccessible(dir: string): boolean {
         try {
             fs.accessSync(dir);
             return true;
         } catch (err) {
-            console.error('objectAccessible Rejected: %o', err);
+            Log.To.info(err, 'objectAccessible Rejected: ' + dir);
             return false;
         }
     }
@@ -48,20 +47,20 @@ export module dvsLookup {
         try {
             return fs.statSync(file).isDirectory();
         } catch (err) {
-            console.error('isDirectory result is negative: %o',JSON.stringify(err));
+            Log.To.info(err, 'isDirectory result is negative: ' +file);
         }
         try {
             fs.mkdirSync(file);
             return fs.statSync(file).isDirectory();
         } catch (err) {
-            console.error('couldnt create it either :-( %o',JSON.stringify(err));
+            Log.To.info(err, 'couldnt create it either ' + file);
             return false;
         }
     }
     function coerceInputDirectoryOrFile(val: string): string {
         if (!val) {
             val = defaultInputDirectory;
-            console.error('no parameter supplied for --input option using default value: %s', defaultInputDirectory);
+            Log.To.warn('no parameter supplied for --input option using default value: ' +  defaultInputDirectory);
         }
         return inputDirectory = fileOrDirectory(val);
     }
@@ -78,13 +77,13 @@ export module dvsLookup {
         if (objectAccessible(path.join(__dirname, dir))) {
             return path.join(__dirname, dir);
         }
-        console.debug('fileOrDirectory: Could not use supplied value %s, using %s', dir, __dirname);
+        Log.To.info('fileOrDirectory: Could not use supplied value '+dir + ', using ' + __dirname);
         return __dirname;
     }
 
     function coerceOutputDirectory(val: string): string {
-        if ('' === val || typeof(val)===undefined || !val) {
-            if ('' === inputDirectory){
+        if ('' === val || typeof (val) === undefined || !val) {
+            if ('' === inputDirectory) {
                 val = defaultOutputDirectory;
             } else {
                 val = inputDirectory;
@@ -92,7 +91,7 @@ export module dvsLookup {
         }
         return outputDirectory = directory(val);
     }
-    function directory(dir: string): string{
+    function directory(dir: string): string {
         // take the first match that is a directory
 
         if (isDirectory(dir)) {
@@ -104,7 +103,7 @@ export module dvsLookup {
         if (isDirectory(path.join(__dirname, dir))) {
             return path.join(__dirname, dir);
         }
-        console.debug('directory: Could not use supplied value %s, using %s', dir, __dirname);
+        Log.To.info('directory: Could not use supplied value ' + dir + ', using ' +  __dirname);
         return __dirname;
     }
 
@@ -119,25 +118,25 @@ export module dvsLookup {
         }
     }
 
-    function getAsLines(file: string) : string[]{
+    function getAsLines(file: string): string[] {
         return fs.readFileSync(file, { encoding: 'utf8', flag: 'r' })
-                .replace('\r\n', '\n')
-                .split('\n');  
+            .replace('\r\n', '\n')
+            .split('\n');
     }
     const EXTENSION = 2;
     const NAME = 1;
     const DIRECTORY = 0;
-    function getFilenameParts(file:string):string[]{
-        const parts  = ['','',''];
+    function getFilenameParts(file: string): string[] {
+        const parts = ['', '', ''];
         const rp = fs.realpathSync(file);
         parts[EXTENSION] = rp.slice(rp.lastIndexOf('.'));
-        parts[NAME] = rp.slice(rp.lastIndexOf('/')+1, rp.lastIndexOf('.'));
-        parts[DIRECTORY] = rp.slice(0,rp.lastIndexOf('/'));
+        parts[NAME] = rp.slice(rp.lastIndexOf('/') + 1, rp.lastIndexOf('.'));
+        parts[DIRECTORY] = rp.slice(0, rp.lastIndexOf('/'));
         return parts;
     }
 
-    function getDate(item:string):string | null{
-        const d = parseIso(item); 
+    function getDate(item: string): string | null {
+        const d = parseIso(item);
         dtfmt(d, 'Do MMMM YYYY');
         if (d) {
             return d.toLocaleDateString();
@@ -146,8 +145,9 @@ export module dvsLookup {
         }
     }
 
-    function buildWordlist(f: string): DefinitionFile{
+    function buildWordlist(f: string): DefinitionFile {
         let wordlist = new DefinitionFile();
+        wordlist.start = Date.now().valueOf();
         wordlist.inputfile = f;
         let fnparts = getFilenameParts(f);
         wordlist.name = fnparts[NAME] + defaultSuffix;
@@ -155,41 +155,41 @@ export module dvsLookup {
         wordlist.ext = '.' + format;
         let lines = getAsLines(f);
         let item = 1;
-        for (let i = 0; i < lines.length; i++){
+        for (let i = 0; i < lines.length; i++) {
             let l = lines[i];
-            if ((l==='') || !l || (l.length<1)){
+            if ((l === '') || !l || (l.length < 1)) {
                 continue;
             }
-            if (l[0] == '#'){  //# means a comment
-                l = l.slice(l.lastIndexOf('#')+1).trim();
-                if (i<2){  //first two lines can be date or class name 
+            if (l[0] == '#') {  //# means a comment
+                l = l.slice(l.lastIndexOf('#') + 1).trim();
+                if (i < 2) {  //first two lines can be date or class name 
                     let d = getDate(l);
-                    if (d){// Date
+                    if (d) {// Date
                         wordlist.date = d;
                     } else { // class name
                         wordlist.class = l;
                     }
                 } else {  // other comments are section titles
-                    wordlist.sections.push({ 
-                        i: item, 
-                        title:l 
+                    wordlist.sections.push({
+                        i: item,
+                        title: l
                     });
                     item++;
                 }
-            } else{ // its a word or phrase
+            } else { // its a word or phrase
                 let wp: Definition;
                 let index = item;
                 let p = l.split('.');  // if there is a . indicates the words are numbered
-                if (p.length > 1){ //there is a number in front - use it instead
+                if (p.length > 1) { //there is a number in front - use it instead
                     index = parseInt(p[0]);
-                    l = p[1].trim(); 
+                    l = p[1].trim();
                 }
                 if (p.length < 2 || isNaN(index)) {
                     index = item;
                     l = l.trim();
                 }
                 item = index + 1;
-                if (l.search(' ')<1){
+                if (l.search(' ') < 1) {
                     wp = new Word();
                 } else {
                     wp = new Phrase();
@@ -209,14 +209,15 @@ export module dvsLookup {
     lookup.version("lookup version " + module.exports.version)
         .option('-l, --list-format', 'Output information on the expected list format for --input files.')
         .option('-i, --input <dir>',
-            'A directory containing one or more files with a .txt extension that contain the words to be defined, or a single file',
-            coerceInputDirectoryOrFile)
+        'A directory containing one or more files with a .txt extension that contain the words to be defined, or a single file',
+        coerceInputDirectoryOrFile)
         .option('-o, --output <dir>',
-            'A directory where the files containing the definitions will be written to, default is to write to the same directory as --input.',
-            coerceOutputDirectory)
+        'A directory where the files containing the definitions will be written to, default is to write to the same directory as --input.',
+        coerceOutputDirectory)
         .option('-f, --format <format>',
-            'A format, the definitions will be output as json, html, txt or md,\ndefault is json',
-            coerceFormat)
+        'A format, the definitions will be output as json, html, txt or md,\ndefault is json',
+        coerceFormat)
+        .option('-v, --verbose', 'Show debugging information')
         .option('-p, --no-pronunciations', 'Do not include pronunciations')
         .option('-d, --no-definitions', 'Do not include word definitions')
         .option('-e, --no-examples', 'Do not include example sentences')
@@ -226,48 +227,48 @@ export module dvsLookup {
         .arguments('[file] ...');
     lookup.parseOptions(process.argv);
     lookup.parse(process.argv);
-    if (lookup.listFormat){
+    if (lookup.listFormat) {
         console.log('Files must be like so ...');
         process.exit(0);
     }
 
-    if (''=== inputDirectory){
+    if ('' === inputDirectory) {
         coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
     }
-    if (''=== outputDirectory){
+    if ('' === outputDirectory) {
         coerceOutputDirectory(lookup.output);
     }
-    if (!format){
+    if (!format) {
         coerceFormat(lookup.format);
     }
 
     // if we are dealing with a dir then populate the list of input files 
-    if (isDirectory(inputDirectory)){
+    if (isDirectory(inputDirectory)) {
         files = fs.readdirSync(inputDirectory)
-                  .filter((f, i, entries) => {
-                      if ((typeof(f) !== 'undefined') && (f.endsWith('txt'))){
-                          return true;
-                      }
-                  })
-                  .map((f,i,entries)=> {return path.join(inputDirectory, f)})
+            .filter((f, i, entries) => {
+                if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
+                    return true;
+                }
+            })
+            .map((f, i, entries) => { return path.join(inputDirectory, f) })
     } else {  // otherwise it is just one file
-        files = [ inputDirectory ];
+        files = [inputDirectory];
     }
     //logIODebugInfo(); /* DEBUGGING INFO   */
     let output: DefinitionFile[] = [];
     files.forEach(f => {
-        if (f && typeof(f) !== 'undefined' && '' !== f){
+        if (f && typeof (f) !== 'undefined' && '' !== f) {
             let wordlist = buildWordlist(f);
             Dictionary.DefineWords(wordlist)
-            .then((defs)=>{
-                let out = FileBuilder.create(format, wordlist);
-                let can = path.join(defs.path, defs.name + defs.ext);
-                fs.writeFileSync(can,out);
-                return defs;
-            })
-            .catch((err)=>{
-                console.error('Error getting definitions for file %s')
-            });
-        }/* next file*/ 
+                .then((defs) => {
+                    let out = FileBuilder.create(format, wordlist);
+                    let can = path.join(defs.path, defs.name + defs.ext);
+                    fs.writeFileSync(can, out);
+                    return defs;
+                })
+                .catch((err) => {
+                    Log.To.error(err, 'Error getting definitions for file ' + f);
+                });
+        }/* next file*/
     });
 }

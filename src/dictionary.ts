@@ -8,8 +8,12 @@ import {
 } from "./definition-file";
 
 import { OED } from './OED/OED';
+import { Log } from './log';
+
+
 
 export class Dictionary {
+    
     static async DefineWords(input: DefinitionFile): Promise<DefinitionFile> {
         for (let i = 0; i < input.definitions.length; i++) {
             await this.getMeanings(input.definitions[i])
@@ -18,8 +22,9 @@ export class Dictionary {
                 input.definitions[i] = d;
             })
             .catch((err)=>{
-                input.definitions[i].origin = 'Error retrieving definition'; 
+                input.definitions[i].state = 'Error retrieving definition'; 
             });
+
         }
         return input;
     }
@@ -40,9 +45,7 @@ export class Dictionary {
                     d.entries[j].examples = Dictionary.extractExamples(cats[j]);
                 }
             })
-            .catch((err) => {
-                console.error('Error retrieving definitions %s\n%s', d.text, err);
-            });
+            .catch((err) => { });
         return d;
     }
 
@@ -62,34 +65,29 @@ export class Dictionary {
                         d.entries[k].index = k + 1;
                         d.entries[k].category = n;
                         d.entries[k].examples = Dictionary.extractExamples(cats[j]);
-                        console.error('Error unexpected missing entry for %s : %s', d.text, n);
+                        Log.To.info('Unexpected missing entry for ' + d.text + ': ' + n);
                     }
                     d.entries[k].synonyms = Dictionary.extractSynonyms(cats[j]);
                     d.entries[k].antonyms = Dictionary.extractAntonyms(cats[j]);
                 }
             })
             .catch((err) => {
-                console.error('Error retrieving synonyms %s\n%s', d.text, err);
-            });
+                d.state = 'Error getting synonyms for word ' + d.text;
+                Log.To.error(err, d.state);
+           });
         return d;
     }
 
-    private static causeDelay(ms: number): void {
-        let w = new Date().getTime() + 1000;
-        let n = 0;
-        while (w > n) { n = new Date().getTime() }
-    }
-    
     private static returnOneString(json: any, path: string): string {
         let p = jp.query(json, path);
         if (p.length===1){
             return p[0].toString();
         }
         if (p.length > 1) {
-            console.log('unexpected extra data using %s', path);
+            Log.To.warn('unexpected extra data using ' + path);
             return p[0].toString();
         }
-        console.log('No data found using %s', path);
+        Log.To.info('No data found using ' + path);
         return '';
     }
 

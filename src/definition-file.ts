@@ -16,6 +16,7 @@ export abstract class Definition {
     pron: string;
     link: string;
     origin: string;
+    state: string = 'undefined';
     entries: Entry[] = [];
 }
 
@@ -31,6 +32,8 @@ export class Section {
 }
 
 export class DefinitionFile {
+    start: number;
+    time: string;
     inputfile: string;
     path: string;
     name: string;
