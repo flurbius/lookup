@@ -6,12 +6,12 @@ class Log {
         name: 'LU',
         streams: [
             {
-                level: 'info',
+                level: 'error',
                 stream: process.stdout
             },
             {
                 type: 'rotating-file',
-                level: 'error',
+                level: 'info',
                 path: '/home/flurbius/lookup/error.log',
                 period: '1d',
                 count: 3

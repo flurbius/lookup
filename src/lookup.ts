@@ -189,7 +189,7 @@ export module dvsLookup {
                     l = l.trim();
                 }
                 item = index + 1;
-                if (l.search(' ') < 1) {
+                if ((l.search(' ') < 1) || (l.search('_') < 1)) {
                     wp = new Word();
                 } else {
                     wp = new Phrase();

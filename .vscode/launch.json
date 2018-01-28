@@ -67,7 +67,7 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
+                "--input=/home/flurbius/lookup/Advanced--2018-01-28.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=txt"
             ],
@@ -83,7 +83,7 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-28.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=md"
             ],
@@ -99,7 +99,7 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-26.txt",
+                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-28.txt",
                 "--output=/home/flurbius/lookup/output/",
                 "--format=html"
             ],

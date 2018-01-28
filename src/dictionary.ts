@@ -22,9 +22,8 @@ export class Dictionary {
                 input.definitions[i] = d;
             })
             .catch((err)=>{
-                input.definitions[i].state = 'Error retrieving definition'; 
+                input.definitions[i].state = 'There was an Error while retrieving the definitions.' + input.definitions[i].state; 
             });
-
         }
         return input;
     }
@@ -45,7 +44,9 @@ export class Dictionary {
                     d.entries[j].examples = Dictionary.extractExamples(cats[j]);
                 }
             })
-            .catch((err) => { });
+            .catch((err) => { 
+                d.state = 'Unable to get some definitions.'; 
+            });
         return d;
     }
 
@@ -72,8 +73,8 @@ export class Dictionary {
                 }
             })
             .catch((err) => {
-                d.state = 'Error getting synonyms for word ' + d.text;
-                Log.To.error(err, d.state);
+                d.state = 'Unable to get some synonyms or antonyms.'; 
+                // Log.To.info(err, d.state);
            });
         return d;
     }
@@ -84,7 +85,7 @@ export class Dictionary {
             return p[0].toString();
         }
         if (p.length > 1) {
-            Log.To.warn('unexpected extra data using ' + path);
+            Log.To.info('unexpected extra data using ' + path);
             return p[0].toString();
         }
         Log.To.info('No data found using ' + path);

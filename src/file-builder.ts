@@ -1,5 +1,5 @@
 import * as os from 'os';
-import * as show from 'showdown'
+import * as md from 'markdown-it'
 
 import {
     DefinitionFile,
@@ -34,20 +34,27 @@ export class FileBuilder {
             const word = defs.definitions[j];
             const sect = defs.sections[i];
             if (sect && word && (word.index > sect.i)) {
-                result.push(f.divider1);
-                result.push(f.section.replace('{SECTION', sect.title));
+                result.push('  ');
+                result.push(f.divider2);
+                result.push('  ');
+                result.push(f.section.replace('{SECTION}', sect.title));
                 i++;
                 continue;
             }
             if (!word) {
                 result.push(' ');
                 result.push(f.divider2);
+                result.push(' ');
                 break;
             }
             result.push(f.word
                 .replace('{#}', word.index.toString())
                 .replace('{WORD}', word.text)
             );
+            if (word.state) {
+                result.push(' ');
+                result.push(f.bold.replace('{TEXT}', word.state));
+            }
             if (word.origin) {
                 result.push(' ');
                 result.push(f.origin.replace('{ORIGIN}', word.origin));
@@ -84,13 +91,14 @@ export class FileBuilder {
         }
         defs.time = ((Date.now().valueOf() - defs.start) / 1000).toFixed(2);
         result.push(' ');
-        result.push(f.origin.replace('Origin: {ORIGIN}', 'This file was made with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'));
+        let credit = f.italic.replace('{TEXT}', 'This file was made with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'); 
+        result.push(credit);
         result.push(f.divider2);
         let payload = result.join(os.EOL);
         if (format === 'html'){
-            const convert = new show.Converter();
+            const convert = new md();
             
-            payload = convert.makeHtml(payload);
+            payload = convert.render(payload);
         }
         return payload;
 
@@ -98,17 +106,25 @@ export class FileBuilder {
     }
     private static addTo(result: string[], f: formatStrings, heading: string, items: string[]): string[] {
         result.push(f.heading.replace('{HEADING}', heading + ' (' + items.length.valueOf() + ')'));
-        if (items.length < 12) {
-            for (let l = 0; l < items.length; l++)
+        let l = 0;
+        if (items.length < 15) {
+            for (l = 0; l < items.length; l++)
                 result.push(f.oneItem.replace('{ITEM}', items[l]));
-        } else if (items.length < 40) {
-            for (let l = 7; l < items.length; l = l + 8)
-                result.push(f.oneItem
-                    .replace('{ITEM}', items.slice(l - 7, l).join(', ')));
-        } else if (items.length < 80)
-            for (let l = 12; l < items.length; l = l + 13)
-                result.push(f.oneItem
-                    .replace('{ITEM}', items.slice(l - 12, l).join(', ')));
+        } else {
+            if (items.length < 101) {
+                for (l = 9; l < items.length; l = l + 10)
+                    result.push(f.oneItem
+                        .replace('{ITEM}', items.slice(l - 9, l+1).join(', ')));
+                if ((l-9)< items.length)
+                    result.push(f.oneItem.replace('{ITEM}', items.slice(l-9, items.length).join(', ')));
+            } else {
+                for (l = 14; l < items.length; l = l + 15)
+                    result.push(f.oneItem
+                        .replace('{ITEM}', items.slice(l - 14, l+1).join(', ')));
+                if ((l-14)< items.length)
+                    result.push(f.oneItem.replace('{ITEM}', items.slice(l-14, items.length).join(', ')));
+            }
+        }
         return result;
     }
 }
