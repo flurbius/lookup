@@ -9,6 +9,7 @@ import {
 
 import { OED } from './OED/OED';
 import { Log } from './log';
+import { isNull, isUndefined } from 'util';
 
 
 
@@ -21,9 +22,7 @@ export class Dictionary {
             .then((d) => {
                 input.definitions[i] = d;
             })
-            .catch((err)=>{
-                input.definitions[i].state = 'There was an Error while retrieving the definitions.' + input.definitions[i].state; 
-            });
+            .catch((err)=>{ });
         }
         return input;
     }
@@ -45,7 +44,7 @@ export class Dictionary {
                 }
             })
             .catch((err) => { 
-                d.state = 'Unable to get some definitions.'; 
+                d.state = 'Error while retrieving definitions.'; 
             });
         return d;
     }
@@ -73,9 +72,8 @@ export class Dictionary {
                 }
             })
             .catch((err) => {
-                d.state = 'Unable to get some synonyms or antonyms.'; 
-                // Log.To.info(err, d.state);
-           });
+                d.state = 'Error while retrieving synonyms or antonyms.'; 
+            });
         return d;
     }
 

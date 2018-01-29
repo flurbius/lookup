@@ -7,19 +7,20 @@ export class OED {
     private static ax = axios.default.create(oed.config);
 
     static queryDictionary(op: string, word: string): Promise<any> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (!word) {
                 reject('No word supplied');
             }
-
-            let endpoint = oed.definitions.replace('{word}', word.toLowerCase());
+            word = word.replace(' ', '_')
+                       .toLowerCase();
+            let endpoint = oed.definitions.replace('{word}', word).escapeHTML();
             if (op == 'SYNONYMS') {
-                endpoint = oed.synonyms.replace('{word}', word.toLowerCase());
+                endpoint = oed.synonyms.replace('{word}', word).escapeHTML();
             }
 
             Log.To.info('Sending request ' + endpoint);
 
-            this.ax.get(endpoint)
+            await this.ax.get(endpoint)
                 .then((response) => {
                     Log.To.info('received response from ' + endpoint);
                     if (response.status !== 200) {
@@ -42,6 +43,5 @@ export class OED {
         } else {
             Log.To.error(error, 'Error before sending request');
         }
-        Log.To.error(error);
     }
 }
