@@ -51,7 +51,7 @@ export const markdown: formatStrings = {
              bold: '__{TEXT}__',
            origin: '_Origin: {ORIGIN}_',
     pronunciation: '__Pronunciation (IPA): {PRONUNCIATION}__',
-             link: '[Audio File]({LINK})',
+             link: 'Audio File: [{LINK}]({LINK})',
          category: '#### {#.#} {CATEGORY}',
          catend: '',
           heading: '  * {HEADING}',

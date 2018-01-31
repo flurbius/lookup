@@ -51,9 +51,10 @@ export class FileBuilder {
                 .replace('{#}', word.index.toString())
                 .replace('{WORD}', word.text)
             );
-            if (word.state) {
+            if (word.state.length >0) {
                 result.push(' ');
-                result.push(f.bold.replace('{TEXT}', word.state));
+                for (let k = 0; k < word.state.length; k++)
+                    result.push(f.oneItem.replace('{ITEM}', word.state[k]));
             }
             if (word.origin) {
                 result.push(' ');
@@ -65,7 +66,8 @@ export class FileBuilder {
             }
             if (word.link) {
                 result.push(' ');
-                result.push(f.link.replace('{LINK}', word.link));
+                const g = f.link.replace('{LINK}', word.link);
+                result.push(g.replace('{LINK}', word.link));
             }
             for (let k = 0; k < word.entries.length; k++) {
                 const category = word.entries[k];

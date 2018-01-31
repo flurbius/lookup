@@ -16,7 +16,7 @@ export abstract class Definition {
     pron: string;
     link: string;
     origin: string;
-    state: string;
+    state: string[] = [];
     entries: Entry[] = [];
 }
 

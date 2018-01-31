@@ -37,11 +37,11 @@ export class OED {
 
     private static handleError(error: axios.AxiosError) {
         if (error.response) {
-            Log.To.error(error, 'Bad response');
+            Log.To.error(error.code, error.response.request, 'Bad response');
         } else if (error.request) {
-            Log.To.error(error, 'Bad request');
+            Log.To.error(error.code, error.request, 'Bad request');
         } else {
-            Log.To.error(error, 'Error before sending request');
+            Log.To.error(error.code, error.config, 'Error before sending request');
         }
     }
 }

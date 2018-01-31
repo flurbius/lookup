@@ -9,10 +9,15 @@ import {
 
 import { OED } from './OED/OED';
 import { Log } from './log';
+import { isNullOrUndefined } from 'util';
 
 
 
 export class Dictionary {
+    private static causeDelay(millis: number): void {
+        const end = new Date().getTime() + Math.abs(millis);
+        while (new Date().getTime() < end){ }
+    }
     
     static async DefineWords(input: DefinitionFile): Promise<DefinitionFile> {
         for (let i = 0; i < input.definitions.length; i++) {
@@ -22,6 +27,7 @@ export class Dictionary {
                 input.definitions[i] = d;
             })
             .catch((err)=>{ });
+            
         }
         return input;
     }
@@ -43,15 +49,13 @@ export class Dictionary {
                 }
             })
             .catch((err) => { 
-                d.state = 'Error while retrieving definitions.'; 
+                d.state.push('Couldn\'t find a definition for ' + d.text);
             });
+        this.causeDelay(500);
         return d;
     }
 
     private static async getSynonyms(d: Definition): Promise<Definition> {
-        if (d.type == 'PHRASE') {
-            return d;
-        }
         await OED.queryDictionary('SYNONYMS', d.text)
             .then((json) => {
                 let cats = Dictionary.extractCategories(json);
@@ -71,7 +75,7 @@ export class Dictionary {
                 }
             })
             .catch((err) => {
-                d.state = 'Error while retrieving synonyms or antonyms.'; 
+                d.state.push('Couldn\'t find synonyms or antonyms for ' + d.text);
             });
         return d;
     }
