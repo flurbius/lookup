@@ -10,6 +10,7 @@ import {
 import { OED } from './OED/OED';
 import { Log } from './log';
 import { isNullOrUndefined } from 'util';
+import { FormatJson } from './format-json';
 
 
 
@@ -34,6 +35,7 @@ export class Dictionary {
     private static async getMeanings(d: Definition): Promise<Definition> {
         await OED.queryDictionary('DEFINITION', d.text)
             .then((json) => {
+                FormatJson.convert(json, d.text);
                 d.pron = Dictionary.extractPronunciation(json);
                 d.origin = Dictionary.extractOrigin(json);
                 d.link = Dictionary.extractPronunciationLink(json);
@@ -58,6 +60,7 @@ export class Dictionary {
     private static async getSynonyms(d: Definition): Promise<Definition> {
         await OED.queryDictionary('SYNONYMS', d.text)
             .then((json) => {
+                FormatJson.convert(json, d.text + '.syn');
                 let cats = Dictionary.extractCategories(json);
                 for (let j = 0; j < cats.length; j++) {
                     let n = Dictionary.extractCategoryName(cats[j]);
