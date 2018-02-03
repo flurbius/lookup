@@ -35,6 +35,7 @@ export class Dictionary {
     private static async getMeanings(d: Definition): Promise<Definition> {
         await OED.queryDictionary('DEFINITION', d.text)
             .then((json) => {
+                this.causeDelay(500);
                 FormatJson.convert(json, d.text);
                 d.pron = Dictionary.extractPronunciation(json);
                 d.origin = Dictionary.extractOrigin(json);
@@ -53,7 +54,7 @@ export class Dictionary {
             .catch((err) => { 
                 d.state.push('Couldn\'t find a definition for ' + d.text);
             });
-        this.causeDelay(500);
+        
         return d;
     }
 

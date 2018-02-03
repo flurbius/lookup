@@ -61,3 +61,23 @@ export const markdown: formatStrings = {
          tableRow: '   - {ITEM1},{ITEM2},{ITEM3},{ITEM4},{ITEM5},{ITEM6},{ITEM7},{ITEM8}',
       tableBottom: ''
 }
+export const html: formatStrings = {
+  title: '<h1>{TITLE}</h1>',
+section: '<h2>{SECTION}</h2>',
+divider1: '<hr />',
+divider2: '<hr />',
+   word: '<h3>{#}. {WORD}</h3>',
+ italic: '<br /><i>{TEXT}</i>',
+   bold: '<br /><b>{TEXT}</b>',
+ origin: '<br /><i>Origin: {ORIGIN}</i>',
+pronunciation: '<br /><b>Pronunciation (IPA): {PRONUNCIATION}</b>',
+   link: '<br />Audio File: <a href="{LINK}">{LINK}</a>',
+category: '<h5> {#.#} {CATEGORY}</h5><ol>',
+catend: '</ol>',
+heading: '<li>{HEADING}</li><ul>',
+footing: '</ul>',
+oneItem: '<li>{ITEM}</li>',
+tableTop: '<table>',
+tableRow: '<tr><td>{ITEM1}</td><td>{ITEM2}</td><td>{ITEM3}</td><td>{ITEM4}</td><td>{ITEM5}</td><td>{ITEM6}</td><td>{ITEM7}</td><td>{ITEM8}</td></tr>',
+tableBottom: '</table>'
+}

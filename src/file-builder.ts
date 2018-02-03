@@ -10,7 +10,7 @@ import {
 } from "./definition-file";
 import jsonFormat from './json-format';
 import * as formats from './formats';
-import { formatStrings, markdown, text } from "./formats";
+import { formatStrings, markdown, text, html } from "./formats";
 
 export class FileBuilder {
     static create(format: string, defs: DefinitionFile): string {
@@ -23,6 +23,7 @@ export class FileBuilder {
             case 'md':
                 break;
             case 'html':
+                f = html;
                 break;
             case 'json':
             default:
@@ -87,6 +88,7 @@ export class FileBuilder {
 
                 if (category.antonyms.length > 0)
                     this.addTo(result, f, 'Antonyms:', category.antonyms);
+                result.push(f.catend);
             }
             result.push(f.divider1);
             j++;
@@ -98,9 +100,7 @@ export class FileBuilder {
         result.push(f.divider2);
         let payload = result.join(os.EOL);
         if (format === 'html'){
-            const convert = new md();
-            
-            payload = convert.render(payload);
+           payload = '<html><head></head><body>'+ payload + '</body></html>';
         }
         return payload;
 
@@ -127,6 +127,7 @@ export class FileBuilder {
                     result.push(f.oneItem.replace('{ITEM}', items.slice(l-14, items.length).join(', ')));
             }
         }
+        result.push(f.footing);
         return result;
     }
 }
