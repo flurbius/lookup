@@ -1,6 +1,6 @@
 import * as  secret from './.secret';
 
-    export const definitions = '/entries/en/{word}/regions=us';
+    export const definitions = '/entries/en/{word}/';
     export const synonyms = '/entries/en/{word}/synonyms;antonyms';
 
 

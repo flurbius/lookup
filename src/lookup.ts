@@ -19,6 +19,7 @@ import {
 import { Dictionary } from './dictionary';
 import { FileBuilder } from './file-builder';
 import {Log} from './log';
+import { isNullOrUndefined } from 'util';
 
 export module dvsLookup {
 
@@ -93,15 +94,17 @@ export module dvsLookup {
     }
     function directory(dir: string): string {
         // take the first match that is a directory
-
+        if (isNullOrUndefined(dir) || ''===dir){
+            return __dirname;
+        }
         if (isDirectory(dir)) {
             return path.join(dir);
         }
         if (isDirectory(path.join('~', dir))) {
             return path.join('~', dir);
         }
-        if (isDirectory(path.join(__dirname, dir))) {
-            return path.join(__dirname, dir);
+        if (isDirectory(path.join('/tmp', dir))) {
+            return path.join('/tmp', dir);
         }
         Log.To.info('directory: Could not use supplied value ' + dir + ', using ' +  __dirname);
         return __dirname;
@@ -227,10 +230,29 @@ export module dvsLookup {
         .arguments('[file] ...');
     lookup.parseOptions(process.argv);
     lookup.parse(process.argv);
-    if (lookup.listFormat) {
-        console.log('Files must be like so ...');
+    
+    if (lookup.listFormat) { //TODO This needs to be done
+        const description = ['Input file format\n\n'
+                            ,'Words should be each on their own line.  Use present perfect tense in verbs, '
+                            ,'make nouns singular, when in doubt use a hyphen. Any line that begins with "#" is regarded as a '
+                            ,'comment and will be ignored.  The first two lines, if they are comments, may contain a date, or '
+                            ,'a string.  If present, the string is used as the class name and appears alongside the date if any'
+                            ,'.  Lines with words on them may have an index.  The numbers should be consecutive starting at 1 '
+                            ,'for the first word.  The number should be on the same line before the word and be immediately '
+                            ,'followed by a period.\n\n'
+                            ,'        eg: 1.novel\n'
+                            ,'            2.puzzle.\n'
+                            ,'            3.muncher.\n'
+                        ];
+        console.log(description.join(''));
         process.exit(0);
     }
+
+    if (lookup.verbose)
+        Log.SetVerbose(true);
+    else
+        Log.SetVerbose(false);
+    Log.console([ JSON.stringify(lookup) ]);
 
     if ('' === inputDirectory) {
         coerceInputDirectoryOrFile(lookup.input); //? why not lookup.opts['input']
@@ -241,17 +263,23 @@ export module dvsLookup {
     if (!format) {
         coerceFormat(lookup.format);
     }
+    Log.console([' Input: ' + inputDirectory,
+                 '   Out: ' + outputDirectory,
+                 'Format: ' + format 
+            ]);
 
     // if we are dealing with a dir then populate the list of input files 
     if (isDirectory(inputDirectory)) {
         files = fs.readdirSync(inputDirectory)
             .filter((f, i, entries) => {
                 if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
+                    Log.console([ 'File: ' + f + ' will be processed.']);
                     return true;
                 }
             })
             .map((f, i, entries) => { return path.join(inputDirectory, f) })
     } else {  // otherwise it is just one file
+        Log.console([ 'File: ' + inputDirectory + ' will be processed.']);
         files = [inputDirectory];
     }
     //logIODebugInfo(); /* DEBUGGING INFO   */

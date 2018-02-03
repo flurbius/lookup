@@ -1,5 +1,7 @@
 import * as Logger from 'bunyan';
 import { isNullOrUndefined } from 'util';
+import *  as Path from 'path';
+import { strictEqual } from 'assert';
 var PrettyStream = require('bunyan-prettystream');
 
 class Log {
@@ -22,7 +24,7 @@ class Log {
                     {
                         type: 'rotating-file',
                         level: 'info',
-                        path: '/home/flurbius/lookup/error.log',
+                        path: Path.join(__dirname, 'error.log'),
                         period: '1d',
                         count: 3
                     }
@@ -32,6 +34,28 @@ class Log {
             this._To = Logger.createLogger(LookupConfig);
         }
         return this._To;
+    }
+    private static _verbose: boolean = true;
+    public static Verbose(): boolean {
+        return Log._verbose;
+
+    }
+    public static SetVerbose(meiyo: boolean): void {
+        Log._verbose = (!meiyo);
+        if (Log._verbose){
+            Log.To.level(Log.To.levels()[0]);
+            Log.To.level(Log.To.levels()[1]);
+        } else {
+            Log.To.level(Log.To.levels()[0]-1);
+            Log.To.level(Log.To.levels()[1]-1);
+        }
+    }
+    public static console(strgs: string[]): void{
+        if (Log._verbose){
+            for (let i = 0; i< strgs.length;i++) {
+                console.log(strgs[i]);
+            }
+        }
     }
 }
 
