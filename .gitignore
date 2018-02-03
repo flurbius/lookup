@@ -66,4 +66,5 @@ typings/
 # dotenv environment variables file
 .env
 
-format-json.ts
+# format-json.ts
+src/format-json.ts
