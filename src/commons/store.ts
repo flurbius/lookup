@@ -1,0 +1,1 @@
+import * as rdFile  from './file';

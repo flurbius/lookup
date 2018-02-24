@@ -51,11 +51,11 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup",
+                "/home/flurbius/lookup",
                 "--output=/home/flurbius/lookup/output",
                 "--format=md"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
+            //"preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]

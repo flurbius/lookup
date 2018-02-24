@@ -1,28 +1,30 @@
-import * as oed from './config';
+ import * as oed from './config';
 import * as axios from 'axios';
-import { Log } from '../log';
-
+import { Log } from '../commons/log';
+import { Record, Ledger } from './record'
 
 export class OED {
+    private static readonly FN = 'OED:: ';
     private static ax = axios.default.create(oed.config);
+    private static requestHistory: Ledger;
 
     static queryDictionary(op: string, word: string): Promise<any> {
         return new Promise(async (resolve, reject) => {
             if (!word) {
                 reject('No word supplied');
             }
-            word = word.replace(' ', '_')
+            word = word.replace(/ /g, '_',)
                        .toLowerCase();
-            let endpoint = oed.definitions.replace('{word}', word).escapeHTML();
+            let endpoint = oed.definitions.replace(/{word}/, word).escapeHTML();
             if (op == 'SYNONYMS') {
-                endpoint = oed.synonyms.replace('{word}', word).escapeHTML();
+                endpoint = oed.synonyms.replace(/{word}/, word).escapeHTML();
             }
 
-            Log.To.info('Sending request ' + endpoint);
+            Log.To.info(OED.FN + 'Sending request ' + endpoint);
 
             await this.ax.get(endpoint)
                 .then((response) => {
-                    Log.To.info('received response from ' + endpoint);
+                    Log.To.info(OED.FN + 'received response from ' + endpoint);
                     if (response.status !== 200) {
                         reject(response.statusText);
                     }
@@ -35,13 +37,13 @@ export class OED {
         });
     }
 
-    private static handleError(error: axios.AxiosError) {
-        if (error.response) {
-            Log.To.error(error.code, error.response.request, 'Bad response');
-        } else if (error.request) {
-            Log.To.error(error.code, error.request, 'Bad request');
+    private static handleError(e: axios.AxiosError) {
+        if (e.response) {
+            Log.To.error(OED.FN + 'Bad response: ' + e.code +' '+ e.name , e.message);
+        } else if (e.request) {
+            Log.To.error(OED.FN + 'Bad request: ' + e.code +' '+ e.name, e.message);
         } else {
-            Log.To.error(error.code, error.config, 'Error before sending request');
+            Log.To.error(OED.FN + 'Failed to send request: ' + e.code +' '+ e.name, e.message);
         }
     }
 }

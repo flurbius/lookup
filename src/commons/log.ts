@@ -57,6 +57,14 @@ class Log {
             }
         }
     }
+    public static fatal(strgs: string[], code:number = -1): void{
+        if (strgs.length<1)
+            strgs = ['Unspecified Fatal Error!?! '];
+        for (let i = 0; i< strgs.length;i++) {
+            console.error(strgs[i]);
+        }
+        process.exit(code);
+    }
 }
 
 export { Log };
