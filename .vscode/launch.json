@@ -8,7 +8,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup no args",
+            "name": "build lookup no args",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "preLaunchTask": "tsc: build - tsconfig.json",
@@ -19,29 +19,23 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup --version",
+            "name": "build, lookup --version",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
                 "--version"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup --help",
+            "name": "lookup --help",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
                 "--help"
-            ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
             ]
         },
         {
@@ -52,29 +46,37 @@
             "sourceMaps": true,
             "args": [
                 "/home/flurbius/lookup",
-                "--output=/home/flurbius/lookup/output",
-                "--format=md"
+                "--output /home/flurbius/lookup/output",
+                "--format md"
             ],
-            //"preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "1 file - txt",
+            "name": "Lookup example",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Advanced--2018-01-28.txt",
-                "--output=/home/flurbius/lookup/output/",
-                "--format=txt"
+                "${workspaceFolder}/example.txt",
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "build lookup test.txt",
+            "program": "${workspaceFolder}/dist/lookup.js",
+            "sourceMaps": true,
+            "args": [
+                "--output=/home/flurbius/lookup/output/",
+                "--format=md",
+                "test.txt"
+            ],
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
         },
         {
             "type": "node",
@@ -83,30 +85,24 @@
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-28.txt",
-                "--output=/home/flurbius/lookup/output/",
-                "--format=md"
+                "--format=html",
+                "test.txt"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "1 file - html",
+            "name": "build lookup dir -txt",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--input=/home/flurbius/lookup/Hi-Intermediate--2018-01-28.txt",
-                "--output=/home/flurbius/lookup/output/",
-                "--format=html"
+                "/home/flurbius/lookup/",
+                "--format=txt"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/dist/**/*.js"
-            ]
+            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
         },
     ]
 }

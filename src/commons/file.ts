@@ -30,13 +30,13 @@ export function isDirectory(path: string): boolean {
     try {
         return fs.statSync(path).isDirectory();
     } catch (err) {
-        Log.To.info(err, FN + 'isDirectory result is negative: ' + path);
+        Log.to.info(err, FN + 'isDirectory result is negative: ' + path);
     }
     try {
         fs.mkdirSync(path);
         return fs.statSync(path).isDirectory();
     } catch (err) {
-        Log.To.info(err, FN + 'couldnt create it either ' + path);
+        Log.to.info(err, FN + 'couldnt create it either ' + path);
         return false;
     }
 }
@@ -55,7 +55,7 @@ function isAccessibleObject(path: string): boolean {
         fs.accessSync(path);
         return true;
     } catch (err) {
-        Log.To.info(err, FN + 'isAccessibleObject Rejected: ' + path);
+        Log.to.info(err, FN + 'isAccessibleObject Rejected: ' + path);
         return false;
     }
 }
@@ -63,7 +63,7 @@ function isAccessibleObject(path: string): boolean {
 function isReadablePathOrFile(path: string, defaultPath:string): string {
     if (!path) {
         path = defaultPath;
-        Log.To.warn(FN + 'isReadablePathOrFile called with no parameter, using default value: ' + defaultPath);
+        Log.to.warn(FN + 'isReadablePathOrFile called with no parameter, using default value: ' + defaultPath);
     }
     return cannonicalPathOrFile(path);
 }
@@ -78,11 +78,11 @@ function cannonicalPathOrFile(path: string): string {
     if (isAccessibleObject(join(__dirname, path))) {
         return join(__dirname, path);
     }
-    Log.To.info(FN + 'cannonicalPathOrFile: Could not use supplied value ' + path + ', using ' + __dirname);
+    Log.to.info(FN + 'cannonicalPathOrFile: Could not use supplied value ' + path + ', using ' + __dirname);
     return __dirname;
 }
 
-export function isWritablePath(path: string, defaultPath: string): string {
+export function ensurePathIsWriteable(path: string, defaultPath: string): string {
     if ('' === path || typeof (path) === undefined || !path) {
         path = defaultPath;
     }
@@ -102,7 +102,7 @@ function cannonicalPath(path: string): string {
     if (isDirectory(join('/tmp', path))) {
         return join('/tmp', path);
     }
-    Log.To.info(FN + 'cannonicalPath: Could not use supplied value ' + path + ', using ' + __dirname);
+    Log.to.info(FN + 'cannonicalPath: Could not use supplied value ' + path + ', using ' + __dirname);
     return __dirname;
 }
 

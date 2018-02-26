@@ -13,7 +13,7 @@ export class Sense implements iSense {
     examples:string[]=[];
 }
 export class Related implements iRelated {
-    register:string='';
+    rel:string='';
     text:string[]=[];
 }
 export class Entry implements iEntry {

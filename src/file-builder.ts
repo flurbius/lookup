@@ -1,9 +1,6 @@
-import * as os from 'os';
-import * as md from 'markdown-it'
-
+import { EOL } from 'os';
 
 import jsonFormat from './json-format';
-import * as formats from './formats';
 import { formatStrings, markdown, text, html } from "./formats";
 import { iLol } from './i-lol';
 
@@ -26,7 +23,11 @@ export class FileBuilder {
                 return jsonFormat.diffy(defs);
         }
 
-        result.push(f.title.replace('{TITLE}', defs.class + ': ' + defs.date));
+        let title = defs.class;
+        if (defs.date)
+        title += ': ' + defs.date;
+
+        result.push(f.title.replace('{TITLE}', title));
         
         let wordNumber = 0;
         for (let i = 0; i < defs.list.length; i++) {
@@ -45,7 +46,7 @@ export class FileBuilder {
             if (word.state.length >0) {
                 result.push(' ');
                 for (let k = 0; k < word.state.length; k++)
-                    result.push(f.oneItem.replace('{ITEM}', word.state[k]));
+                    result.push(f.listitem.replace('{ITEM}', word.state[k]));
             }
             if (word.origin) {
                 result.push(' ');
@@ -66,55 +67,64 @@ export class FileBuilder {
                 lexcat++;
                 result.push(f.category
                     .replace('{#.#}', wordNumber.toString() + '.' + lexcat.toString())
-                    .replace('{WORD}', word.text)
-                    .replace('{CATEGORY}', category.category)
+                    .replace('{WORD}', word.text + ' as ')
+                    .replace('{CATEGORY}', category.category.toLowerCase())
                 );
-                if (category.senses.length > 0)
-                    FileBuilder.addTo(result, f, 'Meanings:', category.senses[0].means);
+                if (category.senses.length > 0){
 
-                if (category.senses[0].examples.length > 0)
-                    FileBuilder.addTo(result, f, 'Examples:', category.senses[0].examples);
+                    result.push(f.heading.replace('{HEADING}', 'Meanings (' + category.senses.length + ')'));
+                    for (let l = 0; l < category.senses.length; l++) {
+                        const sense = category.senses[l];
+                        if (sense.means.length > 0)
+                            FileBuilder.addSense(result, f, l+1, sense.means.join(', '), sense.examples);
+                    }
+                }
+                if (category.related[0] && category.related[0].text.length > 0)
+                    FileBuilder.addList(result, f, category.related[0].rel, category.related[0].text);
 
-                if (category.related[0].text.length > 0)
-                    FileBuilder.addTo(result, f, category.related[0].register, category.related[0].text);
-
-                if (category.related[1].text.length > 0)
-                    FileBuilder.addTo(result, f, category.related[1].register, category.related[1].text);
+                if (category.related[1] && category.related[1].text.length > 0)
+                    FileBuilder.addList(result, f, category.related[1].rel, category.related[1].text);
                 result.push(f.catend);
             }
             result.push(f.divider1);
         }
         defs.time = ((Date.now().valueOf() - defs.start) / 1000).toFixed(2);
         result.push(' ');
-        let credit = f.italic.replace('{TEXT}', 'This file was made with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'); 
+        let today = new Date();
+        let dt = today.toLocaleDateString() + ' at ' + today.toLocaleTimeString();
+        let credit = f.italic.replace('{TEXT}', 'This file was made on ' + dt + ', with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'); 
         result.push(credit);
         result.push(f.divider2);
-        let payload = result.join(os.EOL);
-        if (format === 'html'){
-           payload = '<html><head></head><body>'+ payload + '</body></html>';
-        }
+        let payload = f.document.replace('{DOCUMENT}', result.join(EOL));
         return payload;
     }
 
-    private static addTo(result: string[], f: formatStrings, heading: string, items: string[]): string[] {
+    private static addSense(result: string[], f: formatStrings, num: number, meaning: string, examples: string[]): string[] {
+        const means = f.italic.replace('{TEXT}',  meaning);
+        result.push(f.listitem.replace('{ITEM}',  num.toString() + ': ' + means));
+        for (let m = 0; m < examples.length; m++)
+                result.push(f.sublistitem.replace('{ITEM}', 'eg. ' + examples[m]));
+        return result;
+    }
+    private static addList(result: string[], f: formatStrings, heading: string, items: string[]): string[] {
         result.push(f.heading.replace('{HEADING}', heading + ' (' + items.length.valueOf() + ')'));
         let l = 0;
-        if (items.length < 15) {
+        if (items.length < 21) {
             for (l = 0; l < items.length; l++)
-                result.push(f.oneItem.replace('{ITEM}', items[l]));
+                result.push(f.listitem.replace('{ITEM}', items[l]));
         } else {
             if (items.length < 101) {
                 for (l = 9; l < items.length; l = l + 10)
-                    result.push(f.oneItem.replace('{ITEM}', items.slice(l - 9, l+1).join(', ')));
+                    result.push(f.listitem.replace('{ITEM}', items.slice(l - 9, l+1).join(', ')));
 
                 if ((l-9)< items.length)
-                    result.push(f.oneItem.replace('{ITEM}', items.slice(l-9, items.length).join(', ')));
+                    result.push(f.listitem.replace('{ITEM}', items.slice(l-9, items.length).join(', ')));
             } else {
-                for (l = 14; l < items.length; l = l + 15)
-                    result.push(f.oneItem.replace('{ITEM}', items.slice(l - 14, l+1).join(', ')));
+                for (l = 19; l < items.length; l = l + 20)
+                    result.push(f.listitem.replace('{ITEM}', items.slice(l - 19, l+1).join(', ')));
 
-                if ((l-14)< items.length)
-                    result.push(f.oneItem.replace('{ITEM}', items.slice(l-14, items.length).join(', ')));
+                if ((l-19)< items.length)
+                    result.push(f.listitem.replace('{ITEM}', items.slice(l-19, items.length).join(', ')));
             }
         }
         result.push(f.footing);

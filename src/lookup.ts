@@ -15,13 +15,14 @@ import { Log } from './commons/log';
 import { Lol, Word, Phrase } from './lol';
 import { iLemma, iLol } from './i-lol';
 import {
-    isWritablePath,
+    ensurePathIsWriteable,
     isDirectory,
     parseDate,
     readFileAsArray,
     FilenameParts,
     getFilenameParts
 } from './commons/file';
+import { homedir } from 'os';
 
 // make this a class
 export module dvsLookup {
@@ -29,24 +30,23 @@ export module dvsLookup {
     const FN = "lookup:: ";
     const commander = new com.Command();
     const defaultInputDirectory = 'lookup';
-    const defaultOutputDirectory = 'lookup';
+    let defaultOutputDirectory = 'lookup/output';
     const defaultSuffix = '.defs'
 
     let inputDirectory: string = '';
     let outputDirectory: string = '';
     let format: string = '';
     let files: (string | undefined)[];
-
     function coerceFormat(val: string, defaultFormat: string = 'md') {
         switch (val) {
             case 'md':
             case 'txt':
             case 'html':
-                return val;
+                format = val;
             default:
-                val = defaultFormat;
-                return val;
+                format = val = defaultFormat;
         }
+        return val;
     }
 
     function buildWordlist(f: string): Lol {
@@ -59,6 +59,10 @@ export module dvsLookup {
         wordlist.path = outputDirectory;
         wordlist.ext = '.' + format;
         let lines = readFileAsArray(f);
+        Log.to.info(FN + 'Wordlist - file: ', f);
+        Log.to.info(FN + 'Wordlist - name: ', wordlist.name);
+        Log.to.info(FN + 'Wordlist - path: ', wordlist.path);
+        Log.to.info(FN + 'Wordlist - ext: ', wordlist.ext);
         let item = 1;
         for (let i = 0; i < lines.length; i++) {
             let line = lines[i];
@@ -70,8 +74,10 @@ export module dvsLookup {
                     let d = parseDate(line);
                     if (d) {// Date
                         wordlist.date = d;
+                        Log.to.info(FN + 'Date is ' + d);
                     } else { // class name
                         wordlist.class = line;
+                        Log.to.info(FN + 'Class is ' + line);
                     }
                 } else {
                     // ignore comment
@@ -84,13 +90,14 @@ export module dvsLookup {
                 } else {
                     wp = new Phrase();
                 }
-                // /([A-Z]+[A-Z_ -]*[A-Z]+)/i
+                // /([A-Z]+[A-Z_ -]*[A-Z]+)/i   will match one or more words separated by spaces, underscores or hyphens
                 const m = line.match(/([A-Z]+[A-Z_ -]*[A-Z]+)/i);
-                if (!isNull(m))
-                    wp.text = m[0].toString();
+                if (isNull(m))
+                    wp.text = line.trim();
                 else
-                    wp.text == line;
+                    wp.text = m[0].toString();
                 wordlist.list.push(wp);
+                Log.to.info(FN + 'Word added: ' + wp.text);
             }
         }
         return wordlist;
@@ -113,9 +120,6 @@ export module dvsLookup {
         process.exit(0);
     }
 
-    function CheckFileSystem() {
-    }
-
     function InitializeCommander() {
         commander
             .version("lookup version " + module.exports.version)
@@ -124,7 +128,10 @@ export module dvsLookup {
 
             .option('-o, --output <dir>',
                 'A directory where the files containing the definitions will be written to, default is to write to the directory the input file came from.',
-                (val, def) => { outputDirectory = isWritablePath(val, defaultOutputDirectory) })
+                (val, def) => { 
+                    outputDirectory = ensurePathIsWriteable(val, defaultOutputDirectory);
+                    Log.to.info(FN + 'Output to ' + outputDirectory);
+                })
 
             .option('-f, --format <format>',
                 'One of [json | html | txt | md], the definitions will be output as json, html, txt or md,\ndefault is json',
@@ -140,67 +147,83 @@ export module dvsLookup {
 
     }
 
-    function lookup(arg:string): void {
+    function lookup(arg: string, args:string[]): void {
         if (commander.listFormat)
             showListFileHelpandExit();
 
-        if (commander.verbose)
-            Log.SetVerbose(true);
-        else
-            Log.SetVerbose(false);
+        if (commander.verbose) {
+            Log.setVerbose(true);
+        } else {
+            Log.setVerbose(false);
+        }
 
-        // if (args.length < 1) {
-        //     Log.fatal(['No words to look up!']);
-        // }
-        // for (let n = 0; n < args.length; n++) {
-            inputDirectory = arg;
+        Log.to.info(FN + 'Verbose ' + commander.verbose);
 
-            if ('' === outputDirectory) {
-                outputDirectory = isWritablePath(commander.output, defaultOutputDirectory);
+        inputDirectory = arg;
+
+
+        if ('' === outputDirectory) {
+            if (isDirectory(inputDirectory)){
+                defaultOutputDirectory = inputDirectory;
+            } else {
+                defaultOutputDirectory = getFilenameParts(inputDirectory)[FilenameParts.Path];
             }
-            // if we are dealing with a dir then populate the list of input files 
-            if (isDirectory(inputDirectory)) {
-                files = fs.readdirSync(inputDirectory)
-                    .filter((f, i, entries) => {
-                        if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
-                            Log.console([FN + 'File: ' + f + ' will be processed from a possible ' + entries.length.toString() ]);
-                            return true;
+            outputDirectory = ensurePathIsWriteable(commander.output, defaultOutputDirectory);
+        }
+        if ('' === format){
+            format = coerceFormat(commander.format, 'md');
+        }
+        // if we are dealing with a dir then populate the list of input files 
+        if (isDirectory(inputDirectory)) {
+            files = fs.readdirSync(inputDirectory)
+                .filter((f, i, entries) => {
+                    if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
+                        Log.console([FN + 'File: ' + f + ' will be processed from a possible ' + entries.length.toString()]);
+                        return true;
+                    }
+                })
+                .map((f, i, entries) => { return join(inputDirectory, f) });
+        } else {  // otherwise it is just one file
+            Log.console([FN + 'File: ' + inputDirectory + ' is the only specified file and will be processed.']);
+            files = [inputDirectory];
+        }
+        // or maybe some words
+        Log.to.info(FN + 'Input: ', files);
+        let output: Lol[] = [];
+        files.forEach(f => {
+            if (f && typeof (f) !== 'undefined' && '' !== f) {
+                let wordlist = buildWordlist(f);
+                Clerk.DefineWords(wordlist)
+                    .catch((err) => {
+                        Log.to.error(err, FN + 'Error getting definitions for file ' + f);
+                    })
+                    .then((defs) => {
+                        if (typeof (defs) !== 'undefined' && defs.path !== '') {
+                            let out = FileBuilder.create(format, wordlist);
+                            let can = join(defs.path, defs.name + defs.ext);
+                            fs.writeFileSync(can, out);
+                            return defs;
                         }
                     })
-                    .map((f, i, entries) => { return join(inputDirectory, f) });
-            } else {  // otherwise it is just one file
-                Log.console([FN + 'File: ' + inputDirectory + ' is the only specified file and will be processed.']);
-                files = [inputDirectory];
-            }
-            // or maybe some words
-
-            let output: Lol[] = [];
-            files.forEach(f => {
-                if (f && typeof (f) !== 'undefined' && '' !== f) {
-                    let wordlist = buildWordlist(f);
-                    Clerk.DefineWords(wordlist)
-                        .catch((err) => {
-                            Log.To.error(err, FN + 'Error getting definitions for file ' + f);
-                        })
-                        .then((defs) => {
-                            if (typeof (defs) !== 'undefined' && defs.path !== '') {
-                                let out = FileBuilder.create(format, wordlist);
-                                let can = join(defs.path, defs.name + defs.ext);
-                                fs.writeFileSync(can, out);
-                                return defs;
-                            }
-                        })
-                        .catch((err) => {
-                            Log.To.error(err, FN + 'Error writing file ' + f);
-                        });
-                }/* next file*/
-            });
-  //      } //next arg
+                    .catch((err) => {
+                        Log.to.error(err, FN + 'Error writing file ' + f);
+                    });
+            }/* next file*/
+        });
+        //      } //next arg
     }
     /*
     *Entry point
     */
     function Main() {
+        Log.setLogFile(join(homedir(),'lookup'), 'lookup');
+        console.log (FN + 'Logfile at ' + Log.dir() + '/' + Log.filename() + '.log');
+        Log.to.info('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+        let today = new Date();
+        let dt = today.toLocaleDateString() + ' at ' + today.toLocaleTimeString();
+        Log.to.info(FN + 'Launched on ' + dt  + '<<<<<<<<<<<<<<<<<<<<');
+        Log.to.info(FN + 'Arguments: ', process.argv.join());
+
         InitializeCommander();
 
         let a = commander.parseOptions(process.argv);

@@ -1,6 +1,6 @@
 {
   "name": "lookup",
-  "description": "Lookup a list of words and out put the senses,meanings,synonyms and other data",
+  "description": "Lookup a list of words and output the senses,meanings,synonyms and other data",
   "version": "0.5.0",
   "repository": "https://github.com/flurbius/lookup",
   "bugs": "https://github.com/flurbius/lookup/issues",
@@ -25,12 +25,8 @@
     "@types/bunyan-prettystream": "^0.1.31",
     "@types/core-js": "^0.9.43",
     "@types/jsonpath": "^0.2.0",
-    "@types/markdown-it": "^0.0.4",
     "@types/node": "^9.4.6",
-    "gulp-typescript": "^3.2.4",
-    "gulp4": "^4.0.2",
-    "moments": "^0.0.2",
-    "typescript": "^2.7.2"
+    "typescript": "^2.4.2"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -39,7 +35,6 @@
     "commander": "^2.12.2",
     "core-js": "^2.5.3",
     "jsonpath": "^1.0.0",
-    "markdown-it": "^8.4.0",
     "pkginfo": "^0.4.1",
     "ts-date": "^2.1.6"
   }

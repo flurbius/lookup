@@ -10,7 +10,7 @@ import { OED } from './OED/OED';
 import { Log } from './commons/log';
 // import { isNullOrUndefined } from 'util';
 import { Validator } from './validator';
-import { Sense, Entry } from './lol';
+import { Sense, Entry, Related } from './lol';
 
 
 
@@ -67,8 +67,8 @@ export class Clerk {
                         for (let l = 0; l < subsenses.length; l++){
                             const subsense = new Sense();
                             subsense.key = Clerk.extractSenseId(subsenses[l]);
-                            subsense.means.concat(Clerk.extractSenseDefinitions(subsenses[l]));
-                            subsense.examples.concat(Clerk.extractSenseExamples(subsenses[l]));
+                            subsense.means = Clerk.extractSenseDefinitions(subsenses[l]);
+                            subsense.examples = Clerk.extractSenseExamples(subsenses[l]);
                             word.entries[j].senses.push(subsense);
                         }
                     }
@@ -96,18 +96,14 @@ export class Clerk {
                         word.entries[k].senses[0] = new Sense();
                         word.entries[k].senses[0].examples = Clerk.extractThesaurusExamples(cats[j]);
                     }
-                    word.entries[k].related.push ({
-                        register: 'synonyms',
-                        text: Clerk.extractSynonyms(cats[j])
-                    });
-                    word.entries[k].related.push ({
-                        register: 'antonyms',
-                        text: Clerk.extractAntonyms(cats[j])
-                    });
-                    // get the regions
-                    // loop over and add those
-                    // get the registers
-                    // loop over and add those
+                    const syns = new Related();
+                    syns.rel = 'Synonyms';
+                    syns.text = Clerk.extractSynonyms(cats[j]);
+                    word.entries[k].related.push (syns);
+                    const ants = new Related();
+                    ants.rel = 'Antonyms';
+                    ants.text = Clerk.extractAntonyms(cats[j]);
+                    word.entries[k].related.push (ants);
                 }
             })
             .catch((err) => {
@@ -126,10 +122,10 @@ export class Clerk {
             for (const item of p) {
                 msg += ',' + item.toString();
             }
-            Log.To.info(Clerk.FN + 'Discarding redundant data: ' + msg.slice(1));
+            Log.to.info(Clerk.FN + 'Discarding redundant data: ' + msg.slice(1));
             return p[0].toString();
         }
-        Log.To.info(Clerk.FN + 'No data found using ' + path);
+        Log.to.info(Clerk.FN + 'No data found using ' + path);
         return '';
     }
 

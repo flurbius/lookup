@@ -20,11 +20,11 @@ export class OED {
                 endpoint = oed.synonyms.replace(/{word}/, word).escapeHTML();
             }
 
-            Log.To.info(OED.FN + 'Sending request ' + endpoint);
+            Log.to.info(OED.FN + 'Sending request ' + endpoint);
 
             await this.ax.get(endpoint)
                 .then((response) => {
-                    Log.To.info(OED.FN + 'received response from ' + endpoint);
+                    Log.to.info(OED.FN + 'received response from ' + endpoint);
                     if (response.status !== 200) {
                         reject(response.statusText);
                     }
@@ -39,11 +39,11 @@ export class OED {
 
     private static handleError(e: axios.AxiosError) {
         if (e.response) {
-            Log.To.error(OED.FN + 'Bad response: ' + e.code +' '+ e.name , e.message);
+            Log.to.error(OED.FN + 'Bad response: ' + e.code +' '+ e.name , e.message);
         } else if (e.request) {
-            Log.To.error(OED.FN + 'Bad request: ' + e.code +' '+ e.name, e.message);
+            Log.to.error(OED.FN + 'Bad request: ' + e.code +' '+ e.name, e.message);
         } else {
-            Log.To.error(OED.FN + 'Failed to send request: ' + e.code +' '+ e.name, e.message);
+            Log.to.error(OED.FN + 'Failed to send request: ' + e.code +' '+ e.name, e.message);
         }
     }
 }
