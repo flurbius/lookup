@@ -7,46 +7,46 @@ __Pronunciation (IPA): flʌɪ__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/fly_gb_1.mp3](http://audio.oxforddictionaries.com/en/mp3/fly_gb_1.mp3)
  
-#### 1.1 fly as  verb
+#### 1.1 fly  ( verb)
 * Meanings (18)
-  +  1: _(of a bird, bat, or insect) move through the air using wings_
+  + 1: _(of a bird, bat, or insect) move through the air using wings_
     - eg. close the door or the moths will fly in
     - eg. the bird can fly enormous distances
-  +  2: _(of an aircraft or its occupants) travel through the air_
+  + 2: _(of an aircraft or its occupants) travel through the air_
     - eg. I fly back to London this evening
-  +  3: _control the flight of (an aircraft)_
+  + 3: _control the flight of (an aircraft)_
     - eg. he flew Hurricanes in the war
-  +  4: _transport in an aircraft_
+  + 4: _transport in an aircraft_
     - eg. helicopters flew the injured to hospital
-  +  5: _accomplish (a purpose) in an aircraft_
+  + 5: _accomplish (a purpose) in an aircraft_
     - eg. pilots trained to fly combat missions
-  +  6: _release (a bird) to fly, especially a hawk for hunting or a pigeon for racing._
-  +  7: _move or be hurled quickly through the air_
+  + 6: _release (a bird) to fly, especially a hawk for hunting or a pigeon for racing._
+  + 7: _move or be hurled quickly through the air_
     - eg. he was sent flying by the tackle
     - eg. balls kept flying over her hedge
-  +  8: _(of accusations or insults) be exchanged swiftly and heatedly_
+  + 8: _(of accusations or insults) be exchanged swiftly and heatedly_
     - eg. the accusations flew thick and fast
-  +  9: _(of a report) be circulated swiftly and widely_
+  + 9: _(of a report) be circulated swiftly and widely_
     - eg. rumours were flying around Manchester
-  +  10: _hit a ball high into the air_
+  + 10: _hit a ball high into the air_
     - eg. he flied out to the left field
-  +  11: _wave or flutter in the wind_
+  + 11: _wave or flutter in the wind_
     - eg. she ran after him, her hair flying behind her
-  +  12: _(with reference to a flag) display or be displayed on a flagpole_
+  + 12: _(with reference to a flag) display or be displayed on a flagpole_
     - eg. vessels which flew the Spanish flag
     - eg. flags were flying at half mast
-  +  13: _go or move quickly_
+  + 13: _go or move quickly_
     - eg. she flew along the path
     - eg. his fingertips flew across the keyboard
-  +  14: _depart hastily_
+  + 14: _depart hastily_
     - eg. I must fly!
-  +  15: _(of time) pass swiftly_
+  + 15: _(of time) pass swiftly_
     - eg. the evening had just flown by
-  +  16: _run away; flee_
+  + 16: _run away; flee_
     - eg. those that fly may fight again
-  +  17: _escape from in haste; flee from_
+  + 17: _escape from in haste; flee from_
     - eg. you must fly the country for a while
-  +  18: _be successful_
+  + 18: _be successful_
     - eg. that idea didn't fly with most other council members
 * Synonyms (112)
   + travel through the air, wing its way, wing, glide, soar, wheel, flutter, flit, hover, hang, take wing, take to the air, mount, go by air, travel by air, go by plane, travel by plane, jet, air-dash, transport by air
@@ -58,26 +58,26 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/fly_gb_1.mp3](http://aud
 
 
  
-#### 1.2 fly as  noun
+#### 1.2 fly  ( noun)
 * Meanings (10)
-  +  1: _an opening at the crotch of a pair of trousers, closed with a zip or buttons and typically covered with a flap._
-  +  2: _a flap of material covering the opening or fastening of a garment or of a tent._
-  +  3: _the space over the stage in a theatre._
-  +  5: _a one-horse hackney carriage._
-  +  6: _an attempt_
+  + 1: _an opening at the crotch of a pair of trousers, closed with a zip or buttons and typically covered with a flap._
+  + 2: _a flap of material covering the opening or fastening of a garment or of a tent._
+  + 3: _the space over the stage in a theatre._
+  + 5: _a one-horse hackney carriage._
+  + 6: _an attempt_
     - eg. we decided to give it a fly
-  +  7: _a flying insect of a large order characterized by a single pair of transparent wings and sucking (and often also piercing) mouthparts. Flies are of great importance as vectors of disease._
-  +  8: _used in names of flying insects of other orders, e.g. butterfly, dragonfly, firefly._
-  +  9: _an infestation of flying insects on a plant or animal_
+  + 7: _a flying insect of a large order characterized by a single pair of transparent wings and sucking (and often also piercing) mouthparts. Flies are of great importance as vectors of disease._
+  + 8: _used in names of flying insects of other orders, e.g. butterfly, dragonfly, firefly._
+  + 9: _an infestation of flying insects on a plant or animal_
     - eg. cattle to be treated for warble fly
-  +  10: _a natural or artificial flying insect used as bait in fishing, especially a mayfly._
+  + 10: _a natural or artificial flying insect used as bait in fishing, especially a mayfly._
 
  
-#### 1.3 fly as  adjective
+#### 1.3 fly  ( adjective)
 * Meanings (2)
-  +  1: _knowing and clever_
+  + 1: _knowing and clever_
     - eg. she's fly enough not to get tricked out of it
-  +  2: _fashionably attractive and impressive_
+  + 2: _fashionably attractive and impressive_
     - eg. a fly dude
 
 - - - 
@@ -89,70 +89,70 @@ __Pronunciation (IPA): ɡʊd__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3](http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3)
  
-#### 2.1 good as  adjective
+#### 2.1 good  ( adjective)
 * Meanings (27)
-  +  1: _to be desired or approved of_
+  + 1: _to be desired or approved of_
     - eg. it's good that he's back to his old self
     - eg. Good! The more people the better!
     - eg. a good quality of life
-  +  2: _pleasing and welcome_
+  + 2: _pleasing and welcome_
     - eg. we've had some good news
     - eg. it's good to see you again
-  +  3: _showing approval_
+  + 3: _showing approval_
     - eg. the play had good reviews
-  +  4: _having the required qualities; of a high standard_
+  + 4: _having the required qualities; of a high standard_
     - eg. his marks are just not good enough
     - eg. a good restaurant
-  +  5: _skilled at doing or dealing with a specified thing_
+  + 5: _skilled at doing or dealing with a specified thing_
     - eg. he was good with children
     - eg. I'm good at crosswords
-  +  6: _healthy, strong, or well_
+  + 6: _healthy, strong, or well_
     - eg. she's not feeling too good
-  +  7: _useful, advantageous, or beneficial in effect_
+  + 7: _useful, advantageous, or beneficial in effect_
     - eg. too much sun is not good for you
-  +  8: _appropriate to a particular purpose_
+  + 8: _appropriate to a particular purpose_
     - eg. this is a good month for planting seeds
-  +  9: _(of language) with correct grammar and pronunciation_
+  + 9: _(of language) with correct grammar and pronunciation_
     - eg. she speaks good English
-  +  10: _strictly adhering to or fulfilling all the principles of a particular religion or cause_
+  + 10: _strictly adhering to or fulfilling all the principles of a particular religion or cause_
     - eg. I am the eldest of five in a good Catholic family
-  +  11: _possessing or displaying moral virtue_
+  + 11: _possessing or displaying moral virtue_
     - eg. her father was a good man
-  +  12: _showing kindness_
+  + 12: _showing kindness_
     - eg. it was good of you to come
-  +  13: _obedient to rules or conventions_
+  + 13: _obedient to rules or conventions_
     - eg. accustom the child to being rewarded for good behaviour
-  +  14: _used to address or refer to people in a courteous, patronizing, or ironic way_
+  + 14: _used to address or refer to people in a courteous, patronizing, or ironic way_
     - eg. a man very like your good self, in fact
     - eg. the good lady of the house
-  +  15: _commanding respect_
+  + 15: _commanding respect_
     - eg. he was concerned with establishing and maintaining his good name
-  +  16: _belonging or relating to a high social class_
+  + 16: _belonging or relating to a high social class_
     - eg. he comes from a good family
-  +  17: _giving pleasure; enjoyable or satisfying_
+  + 17: _giving pleasure; enjoyable or satisfying_
     - eg. the streets fill up with people looking for a good time
-  +  18: _pleasant to look at; attractive_
+  + 18: _pleasant to look at; attractive_
     - eg. you're looking pretty good
-  +  19: _(of clothes) smart and suitable for formal wear_
+  + 19: _(of clothes) smart and suitable for formal wear_
     - eg. he went upstairs to change out of his good suit
-  +  20: _thorough_
+  + 20: _thorough_
     - eg. have a good look around
     - eg. now is the time to have a really good clear-up
-  +  21: _used to emphasize that a number is at least as great as one claims_
+  + 21: _used to emphasize that a number is at least as great as one claims_
     - eg. they're a good twenty years younger
-  +  22: _used to emphasize a following adjective or adverb_
+  + 22: _used to emphasize a following adjective or adverb_
     - eg. we had a good long hug
     - eg. it'll be good and dark by then
-  +  23: _fairly large in number, amount, or size_
+  + 23: _fairly large in number, amount, or size_
     - eg. the match attracted a good crowd
     - eg. there's a good chance that we may be able to help
-  +  24: _valid_
+  + 24: _valid_
     - eg. the ticket is good for travel from May to September
-  +  25: _likely to provide_
+  + 25: _likely to provide_
     - eg. she's always good for a laugh
-  +  26: _sufficient to pay for_
+  + 26: _sufficient to pay for_
     - eg. his money was good for a bottle of whisky
-  +  27: _used in conjunction with the name of God or a related expression as an exclamation of extreme surprise or anger_
+  + 27: _used in conjunction with the name of God or a related expression as an exclamation of extreme surprise or anger_
     - eg. good heavens!
 * Synonyms (450)
   + fine, of high quality, of a high standard, quality, superior, satisfactory, acceptable, adequate, in order, up to scratch, up to the mark, up to standard, up to par, competent, not bad, all right, excellent, superb, outstanding, magnificent
@@ -200,22 +200,22 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3](http://au
 
 
  
-#### 2.2 good as  noun
+#### 2.2 good  ( noun)
 * Meanings (5)
-  +  1: _that which is morally right; righteousness_
+  + 1: _that which is morally right; righteousness_
     - eg. a mysterious balance of good and evil
-  +  2: _benefit or advantage to someone or something_
+  + 2: _benefit or advantage to someone or something_
     - eg. he convinces his father to use his genius for the good of mankind
     - eg. he is too clever for his own good
     - eg. the preservation of old buildings matters because they contribute to the general public good
-  +  3: _merchandise or possessions_
+  + 3: _merchandise or possessions_
     - eg. stolen goods
     - eg. the market price of an agricultural good
     - eg. imports of luxury goods
-  +  4: _things to be transported, as distinct from passengers_
+  + 4: _things to be transported, as distinct from passengers_
     - eg. a means of transporting passengers as well as goods
     - eg. a goods train
-  +  5: _the genuine article._
+  + 5: _the genuine article._
 * Synonyms (51)
   + virtue, righteousness, virtuousness, goodness, morality, ethicalness, uprightness, upstandingness, integrity, principle
   + dignity, rectitude, rightness, honesty, truth, truthfulness, honour, incorruptibility, probity, propriety
@@ -230,14 +230,14 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3](http://au
 
 
  
-#### 2.3 good as  adverb
+#### 2.3 good  ( adverb)
 * Meanings (1)
-  +  1: _well_
+  + 1: _well_
     - eg. I'm feeling pretty good, all things considered
     - eg. my mother could never cook this good
 
  
-#### 2.4 good as  interjection
+#### 2.4 good  ( interjection)
 * Meanings (1)
 * Synonyms (18)
   + fine
@@ -263,32 +263,30 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3](http://au
 - - - 
 ### 3. __something__
  
-  + Encountered a problem retrieving related words for something
- 
 _Origin: Old English sum thing (see some, thing)_
  
 __Pronunciation (IPA): ˈsʌmθɪŋ__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/something_gb_1.mp3](http://audio.oxforddictionaries.com/en/mp3/something_gb_1.mp3)
  
-#### 3.1 something as  pronoun
+#### 3.1 something  ( pronoun)
 * Meanings (2)
-  +  1: _a thing that is unspecified or unknown_
+  + 1: _a thing that is unspecified or unknown_
     - eg. I knew something terrible had happened
     - eg. we stopped for something to eat
     - eg. something about her frightened me
-  +  2: _used in various expressions indicating that a description or amount being stated is not exact_
+  + 2: _used in various expressions indicating that a description or amount being stated is not exact_
     - eg. there were something like fifty applications
     - eg. a wry look, something between amusement and regret
     - eg. grassland totalling something over three hundred acres
 
  
-#### 3.2 something as  adverb
+#### 3.2 something  ( adverb)
 * Meanings (2)
-  +  1: _used for emphasis with a following adjective functioning as an adverb_
+  + 1: _used for emphasis with a following adjective functioning as an adverb_
     - eg. my back hurts something terrible
     - eg. he used to take the mickey out of me something awful
-  +  2: _to some extent; somewhat_
+  + 2: _to some extent; somewhat_
     - eg. the people were something scared
 
 - - - 
@@ -300,17 +298,17 @@ __Pronunciation (IPA): ˈnʌθɪŋ__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/nothing_gb_1.mp3](http://audio.oxforddictionaries.com/en/mp3/nothing_gb_1.mp3)
  
-#### 4.1 nothing as  pronoun
+#### 4.1 nothing  ( pronoun)
 * Meanings (3)
-  +  1: _not anything; no single thing_
+  + 1: _not anything; no single thing_
     - eg. I said nothing
     - eg. there's nothing you can do
     - eg. they found nothing wrong
-  +  2: _something of no importance or concern_
+  + 2: _something of no importance or concern_
     - eg. no longer could we be treated as nothings
     - eg. they are nothing to him
     - eg. ‘What are you laughing at?’ ‘Oh, nothing, sir’
-  +  3: _(in calculations) no amount; nought._
+  + 3: _(in calculations) no amount; nought._
 * Synonyms (46)
   + not a thing, not a single thing, not anything, nothing at all, nil, zero, nowt, zilch, sweet Fanny Adams, sweet FA
   + nix, not a dicky bird, damn all, not a sausage, zip, nada, a goose egg, bupkis, bugger all, sod all
@@ -324,38 +322,36 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/nothing_gb_1.mp3](http:/
 
 
  
-#### 4.2 nothing as  adjective
+#### 4.2 nothing  ( adjective)
 * Meanings (1)
-  +  1: _having no prospect of progress; of no value_
+  + 1: _having no prospect of progress; of no value_
     - eg. he had a series of nothing jobs
 
  
-#### 4.3 nothing as  adverb
+#### 4.3 nothing  ( adverb)
 * Meanings (2)
-  +  1: _not at all_
+  + 1: _not at all_
     - eg. a man who cared nothing for her
     - eg. he looks nothing like the others
-  +  2: _used to contradict something emphatically_
+  + 2: _used to contradict something emphatically_
     - eg. ‘This is a surprise.’ ‘Surprise nothing.’
 
 - - - 
 ### 5. __anything__
  
-  + Encountered a problem retrieving related words for anything
- 
 __Pronunciation (IPA): ˈɛnɪθɪŋ__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/anything_gb_2.mp3](http://audio.oxforddictionaries.com/en/mp3/anything_gb_2.mp3)
  
-#### 5.1 anything as  pronoun
+#### 5.1 anything  ( pronoun)
 * Meanings (3)
-  +  1: _used to refer to a thing, no matter what_
+  + 1: _used to refer to a thing, no matter what_
     - eg. he inquired whether there was anything he could do
     - eg. have you found anything?
     - eg. nobody was saying anything
-  +  2: _used for emphasis_
+  + 2: _used for emphasis_
     - eg. I was ready for anything
-  +  3: _used to indicate a range_
+  + 3: _used to indicate a range_
     - eg. he trains anything from seven to eight hours a day
 
 - - - 
@@ -367,21 +363,21 @@ __Pronunciation (IPA): ˈfəʊkəs__
  
 Audio File: [http://audio.oxforddictionaries.com/en/mp3/focus_gb_1.mp3](http://audio.oxforddictionaries.com/en/mp3/focus_gb_1.mp3)
  
-#### 6.1 focus as  noun
+#### 6.1 focus  ( noun)
 * Meanings (10)
   + 1: _the centre of interest or activity_
     - eg. this generation has made the environment a focus of attention
-  +  2: _an act of concentrating interest or activity on something_
+  + 2: _an act of concentrating interest or activity on something_
     - eg. our focus on the customer's requirements
-  +  3: _the point of origin of an earthquake._
-  +  4: _the principal site of an infection or other disease._
-  +  5: _the state or quality of having or producing clear visual definition_
+  + 3: _the point of origin of an earthquake._
+  + 4: _the principal site of an infection or other disease._
+  + 5: _the state or quality of having or producing clear visual definition_
     - eg. the incident brought her feelings for Alexander sharply into focus
     - eg. his face is rather out of focus
-  +  7: _the point at which an object must be situated with respect to a lens or mirror for an image of it to be well defined._
-  +  8: _a device on a lens which can be adjusted to produce a clear image._
-  +  9: _one of the fixed points from which the distances to any point of a given curve, such as an ellipse or parabola, are connected by a linear relation._
-  +  10: _an element of a sentence that is given prominence by intonational or other means._
+  + 7: _the point at which an object must be situated with respect to a lens or mirror for an image of it to be well defined._
+  + 8: _a device on a lens which can be adjusted to produce a clear image._
+  + 9: _one of the fixed points from which the distances to any point of a given curve, such as an ellipse or parabola, are connected by a linear relation._
+  + 10: _an element of a sentence that is given prominence by intonational or other means._
 * Synonyms (40)
   + centre, focal point, central point, centre of attention, hub, pivot, nucleus, heart, cornerstone, linchpin
   + kingpin, bedrock, basis, anchor, backbone, cynosure, emphasis, accent, priority, attention
@@ -390,23 +386,23 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/focus_gb_1.mp3](http://a
 
 
  
-#### 6.2 focus as  verb
+#### 6.2 focus  ( verb)
 * Meanings (10)
-  +  1: _adapt to the prevailing level of light and become able to see clearly_
+  + 1: _adapt to the prevailing level of light and become able to see clearly_
     - eg. try to focus on a stationary object
-  +  2: _cause (one's eyes) to focus_
+  + 2: _cause (one's eyes) to focus_
     - eg. she focused her eyes on his face
-  +  3: _adjust the focus of (a telescope, camera, or other instrument)_
+  + 3: _adjust the focus of (a telescope, camera, or other instrument)_
     - eg. they were focusing a telescope on a star
-  +  4: _(of rays or waves) meet at a single point._
-  +  5: _(of a lens) make (rays or waves) meet at a single point._
-  +  6: _(of light, radio waves, or other energy) become concentrated into a sharp beam._
-  +  7: _(of a lens) concentrate (light, radio waves, or energy) into a sharp beam._
-  +  8: _pay particular attention to_
+  + 4: _(of rays or waves) meet at a single point._
+  + 5: _(of a lens) make (rays or waves) meet at a single point._
+  + 6: _(of light, radio waves, or other energy) become concentrated into a sharp beam._
+  + 7: _(of a lens) concentrate (light, radio waves, or energy) into a sharp beam._
+  + 8: _pay particular attention to_
     - eg. the study will focus on a number of areas in Wales
-  +  9: _concentrate_
+  + 9: _concentrate_
     - eg. an opportunity to focus research on the health needs of the population
-  +  10: _place the focus on (an element of a sentence)._
+  + 10: _place the focus on (an element of a sentence)._
 * Synonyms (17)
   + bring into focus
   + bring to a focus
@@ -429,5 +425,5 @@ Audio File: [http://audio.oxforddictionaries.com/en/mp3/focus_gb_1.mp3](http://a
 
 - - - 
  
-_This file was made on 2018-2-27 at 07:01:03, with lookup, using the services of the Oxford English Dictionary, It took 22.73 seconds to create._
+_This file was made on 2018-2-27 at 08:21:36, using the services of the Oxford English Dictionary, It took 23.95 seconds to create._
 ___

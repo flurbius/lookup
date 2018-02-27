@@ -43,11 +43,11 @@ export class FileBuilder {
                 .replace('{#}', wordNumber.toString())
                 .replace('{WORD}', word.text)
             );
-            if (word.state.length >0) {
-                result.push(' ');
-                for (let k = 0; k < word.state.length; k++)
-                    result.push(f.listitem.replace('{ITEM}', word.state[k]));
-            }
+            // if (word.state.length >0) {
+            //     result.push(' ');
+            //     for (let k = 0; k < word.state.length; k++)
+            //         result.push(f.listitem.replace('{ITEM}', word.state[k]));
+            // }
             if (word.origin) {
                 result.push(' ');
                 result.push(f.origin.replace('{ORIGIN}', word.origin));
@@ -67,8 +67,8 @@ export class FileBuilder {
                 lexcat++;
                 result.push(f.category
                     .replace('{#.#}', wordNumber.toString() + '.' + lexcat.toString())
-                    .replace('{WORD}', word.text + ' as ')
-                    .replace('{CATEGORY}', category.category.toLowerCase())
+                    .replace('{WORD}', word.text + '  (')
+                    .replace('{CATEGORY}', category.category.toLowerCase()+ ')')
                 );
                 if (category.senses.length > 0){
 
@@ -92,7 +92,7 @@ export class FileBuilder {
         result.push(' ');
         let today = new Date();
         let dt = today.toLocaleDateString() + ' at ' + today.toLocaleTimeString();
-        let credit = f.italic.replace('{TEXT}', 'This file was made on ' + dt + ', with lookup, using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'); 
+        let credit = f.italic.replace('{TEXT}', 'This file was made on ' + dt + ', using the services of the Oxford English Dictionary, It took ' + defs.time + ' seconds to create.'); 
         result.push(credit);
         result.push(f.divider2);
         let payload = f.document.replace('{DOCUMENT}', result.join(EOL));
