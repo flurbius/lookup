@@ -20,14 +20,18 @@ class Log {
     }
 
     public static dir(): string {
-        return Log._dir;
+        if (Log._logPath === '')
+            Log._logPath =  Path.join(homedir(), 'logs');
+        return Log._logPath;
     }
     public static filename(): string {
-        return Log._log;
+        if (Log._logFileName === '')
+            Log._logFileName = 'error';
+        return Log._logFileName;
     }
     public static setLogFile(dir: string, name: string = 'error'){
-        Log._dir = ensurePathIsWriteable(dir, homedir());
-        Log._log = name;
+        Log._logPath = ensurePathIsWriteable(dir, Path.join(homedir(), 'logs'));
+        Log._logFileName = name;
         this.initializeLog();
     }
     public static setVerbose(meiyo: boolean): void {
@@ -55,30 +59,26 @@ class Log {
         }
         process.exit(code);
     }
-    private static _dir = Path.join(homedir(), 'logs');
-    private static _log = 'error';
+    private static _logPath = '';
+    private static _logFileName = '';
     private static _to: Logger;
     private static _verbose: boolean = true;
     private static initializeLog() {
-        // if (!isNullOrUndefined(this._To)){
-        //     this._To.removeAllListeners();
-        //     this._To = null;
-        // }
         const pretty = new PrettyStream();
         pretty.pipe(process.stdout);
+        const filename = Path.join(Log.dir(), Log.filename() +'.log');
         const config: Logger.LoggerOptions = {
             name: 'LookUp',
             streams: [
                 {
-                    level: 'error',
-                    stream: pretty
-                },
-                {
                     type: 'rotating-file',
                     level: 'info',
-                    path: Path.join(Log.dir(), Log._log + '.log'),
+                    path: filename,
                     period: '1d',
-                    count: 3
+                    count: 3,
+                    closeOnExit: true,
+                    name: 'error.log',
+                    reemitErrorEvents: true
                 }
             ],
             src: true,

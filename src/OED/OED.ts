@@ -31,19 +31,19 @@ export class OED {
                     resolve(response.data);
                 })
                 .catch((err) => {
-                    this.handleError(err);
+                    this.handleError(err, word);
                     reject(err);
                 });
         });
     }
 
-    private static handleError(e: axios.AxiosError) {
+    private static handleError(e: axios.AxiosError, subject: string) {
         if (e.response) {
-            Log.to.error(OED.FN + 'Bad response: ' + e.code +' '+ e.name , e.message);
+            Log.to.error(OED.FN + 'Bad response for: ' + subject, e.message);
         } else if (e.request) {
-            Log.to.error(OED.FN + 'Bad request: ' + e.code +' '+ e.name, e.message);
+            Log.to.error(OED.FN + 'Bad request for: ' + subject, e.message);
         } else {
-            Log.to.error(OED.FN + 'Failed to send request: ' + e.code +' '+ e.name, e.message);
+            Log.to.error(OED.FN + 'Failed to send request for: ' + subject, e.message);
         }
     }
 }

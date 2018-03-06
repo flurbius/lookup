@@ -8,7 +8,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "build lookup no args",
+            "name": "b lookup no args",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "preLaunchTask": "tsc: build - tsconfig.json",
@@ -19,7 +19,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "build, lookup --version",
+            "name": "b lookup --version",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
@@ -31,23 +31,24 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "lookup --help",
+            "name": "!b lookup ~/lookup -t",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--help"
+                "lookup/",
+                "-t"
             ]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup dir-dir",
+            "name": "b lookup homedir/lookup --md --out",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
                 "/home/flurbius/lookup",
                 "--output /home/flurbius/lookup/output",
-                "--format md"
+                "--md"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
@@ -55,11 +56,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Lookup example",
+            "name": "b lookup (path)/example.txt --json",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
                 "${workspaceFolder}/example.txt",
+                "--json"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
@@ -67,13 +69,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "build lookup test.txt",
+            "name": "b lookup -H example.txt",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--output=/home/flurbius/lookup/output/",
-                "--format=md",
-                "test.txt"
+                "-H",
+                "example.txt"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
@@ -81,12 +82,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "1 file - md",
+            "name": "b lookup --list-format",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "--format=html",
-                "test.txt"
+                "--list-format"
             ],
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
@@ -94,15 +94,13 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "build lookup dir -txt",
+            "name": "!b lookup -h",
             "program": "${workspaceFolder}/dist/lookup.js",
             "sourceMaps": true,
             "args": [
-                "/home/flurbius/lookup/",
-                "--format=txt"
+                "-h"
             ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [ "${workspaceFolder}/dist/**/*.js" ]
+            "console": "externalTerminal"
         },
     ]
 }

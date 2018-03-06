@@ -1,9 +1,10 @@
 
 import * as fs from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { Log } from './log';
 import { isNullOrUndefined } from 'util';
-import { parseIso,  format as dtfmt } from 'ts-date/locale/en';
+import { parseIso,  format as formatDate } from 'ts-date/locale/en';
+import { homedir } from 'os';
 
 const FN = 'util:: ';
 
@@ -42,7 +43,7 @@ export function isDirectory(path: string): boolean {
 }
 export function parseDate(item: string): string | null {
     const d = parseIso(item);
-    dtfmt(d, 'Do MMMM YYYY');
+    formatDate(d, 'Do MMMM YYYY');
     if (d) {
         return d.toLocaleDateString();
     } else {
@@ -50,7 +51,7 @@ export function parseDate(item: string): string | null {
     }
 }
 
-function isAccessibleObject(path: string): boolean {
+export function isAccessibleObject(path: string): boolean {
     try {
         fs.accessSync(path);
         return true;
@@ -60,50 +61,51 @@ function isAccessibleObject(path: string): boolean {
     }
 }
 
-function isReadablePathOrFile(path: string, defaultPath:string): string {
+export function ensurePathOrFileIsReadable(path: string, defaultPath:string = ''): string {
     if (!path) {
         path = defaultPath;
-        Log.to.warn(FN + 'isReadablePathOrFile called with no parameter, using default value: ' + defaultPath);
+        Log.to.warn(FN + 'ensurePathOrFileIsReadable called with no parameter, using default value: ' + defaultPath);
     }
-    return cannonicalPathOrFile(path);
+    let result = cannonicalPathOrFile(path);
+    if ('' === result && '' !== defaultPath)
+        return cannonicalPathOrFile(defaultPath);
+    else
+        return result;
 }
 
-function cannonicalPathOrFile(path: string): string {
-    if (isAccessibleObject(path)) {
-        return join(path);
+export function cannonicalPathOrFile(path: string): string {
+    if (isAccessibleObject(resolve(path))) {
+        return resolve(path);
     }
-    if (isAccessibleObject(join('~', path))) {
-        return join('~', path);
-    }
-    if (isAccessibleObject(join(__dirname, path))) {
-        return join(__dirname, path);
-    }
-    Log.to.info(FN + 'cannonicalPathOrFile: Could not use supplied value ' + path + ', using ' + __dirname);
-    return __dirname;
+    const it = resolve (__dirname, homedir(), path);
+    if (isAccessibleObject(it))
+        return it;
+    Log.to.info(FN + 'cannonicalPathOrFile: Could not use supplied value ' + path);
+    return '';
 }
 
-export function ensurePathIsWriteable(path: string, defaultPath: string): string {
+export function ensurePathIsWriteable(path: string, defaultPath: string = ''): string {
     if ('' === path || typeof (path) === undefined || !path) {
         path = defaultPath;
     }
-    return cannonicalPath(path);
+    let result = cannonicalPath(path);
+    if ('' === result && '' !== defaultPath)
+        return cannonicalPath(defaultPath);
+    else if (isAccessibleObject(result))
+        return result;
+    else
+        return '';
 }
-function cannonicalPath(path: string): string {
+export function cannonicalPath(path: string): string {
     // take the first match that is a directory
     if (isNullOrUndefined(path) || '' === path) {
-        return __dirname;
+        return '';
     }
-    if (isDirectory(path)) {
-        return join(path);
-    }
-    if (isDirectory(join('~', path))) {
-        return join('~', path);
-    }
-    if (isDirectory(join('/tmp', path))) {
-        return join('/tmp', path);
-    }
-    Log.to.info(FN + 'cannonicalPath: Could not use supplied value ' + path + ', using ' + __dirname);
-    return __dirname;
+    const it = resolve('/tmp', homedir(), path);
+    if (isDirectory(it))
+        return it;
+    Log.to.info(FN + 'cannonicalPath: Could not use supplied value ' + path);
+    return '';
 }
 
 

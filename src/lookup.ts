@@ -17,10 +17,12 @@ import { iLemma, iLol } from './i-lol';
 import {
     ensurePathIsWriteable,
     isDirectory,
+    isAccessibleObject,
     parseDate,
     readFileAsArray,
     FilenameParts,
-    getFilenameParts
+    getFilenameParts,
+    ensurePathOrFileIsReadable
 } from './commons/file';
 import { homedir } from 'os';
 
@@ -30,36 +32,32 @@ export module dvsLookup {
     const FN = "lookup:: ";
     const commander = new com.Command();
     const defaultInputDirectory = 'lookup';
-    let defaultOutputDirectory = 'lookup/output';
     const defaultSuffix = '.defs'
 
     let inputDirectory: string = '';
     let outputDirectory: string = '';
-    let format: string = '';
+    let format: string = 'md';
     let files: (string | undefined)[];
-    function coerceFormat(val: string, defaultFormat: string = 'md') {
-        switch (val) {
-            case 'md':
-            case 'txt':
-            case 'html':
-                format = val;
-            default:
-                format = val = defaultFormat;
-        }
-        return val;
-    }
 
     function buildWordlist(f: string): Lol {
         let wordlist = new Lol();
-
         wordlist.start = Date.now().valueOf();
+        let lines: string[] = [];
+        if (f.startsWith('ARGS~~')){
+            lines = f.slice(f.lastIndexOf('ARGS~~')).split(',');
+            wordlist.name= 'args-' + Date.now().toString() + defaultSuffix;
+            Log.to.info(FN+ 'Wordlist - comandline: ', f);
+        } else {
+            let fnparts = getFilenameParts(f);
+            wordlist.name = fnparts[FilenameParts.Name] + defaultSuffix;
+            lines = readFileAsArray(f);
+            Log.to.info(FN + 'Wordlist - file: ', f);
+        }
+
+
         wordlist.source = f;
-        let fnparts = getFilenameParts(f);
-        wordlist.name = fnparts[FilenameParts.Name] + defaultSuffix;
         wordlist.path = outputDirectory;
         wordlist.ext = '.' + format;
-        let lines = readFileAsArray(f);
-        Log.to.info(FN + 'Wordlist - file: ', f);
         Log.to.info(FN + 'Wordlist - name: ', wordlist.name);
         Log.to.info(FN + 'Wordlist - path: ', wordlist.path);
         Log.to.info(FN + 'Wordlist - ext: ', wordlist.ext);
@@ -102,6 +100,7 @@ export module dvsLookup {
         }
         return wordlist;
     }
+
     function showListFileHelpandExit() {
         const description = [
             'Input file format\n\nWords should be each on their own line.  Use present perfect tense in '
@@ -129,22 +128,33 @@ export module dvsLookup {
             .option('-o, --output <dir>',
                 'A directory where the files containing the definitions will be written to, default is to write to the directory the input file came from.',
                 (val, def) => { 
-                    outputDirectory = ensurePathIsWriteable(val, defaultOutputDirectory);
+                    outputDirectory = ensurePathIsWriteable(val);
                     Log.to.info(FN + 'Output to ' + outputDirectory);
                 })
 
-            .option('-f, --format <format>',
-                'One of [json | html | txt | md], the definitions will be output as json, html, txt or md,\ndefault is json',
-                (val, def) => { format = coerceFormat(val) })
+            .option('-m, --markdown',
+                'Output is formatted as markdown (default)',
+                () => { format = 'md'})
+            
+            .option('-H, --html',
+                'Output is formatted as HTML',
+                () => { format = 'html'})
+
+            .option('-t, --txt',
+                'Output is formatted as plain text',
+                () => { format = 'txt'})
+
+            .option('-j, --json',
+                'Output is formatted as JSON',
+                () => { format = 'json'})
 
             .option('-v, --verbose', 'Show debugging information')
 
-            .command('*', 'Look up the definitions of words, using an online dictionary, ' +
+            .command('', 'Look up the definitions of words, using an online dictionary, ' +
                 'you may specify a file of words, a directory of such files, or a word to be looked up.  ' +
                 'For information regarding the file format type "lookup --list-format.')
             .arguments('<file|dir|word>')
             .action(lookup);
-
     }
 
     function lookup(arg: string, args:string[]): void {
@@ -159,35 +169,34 @@ export module dvsLookup {
 
         Log.to.info(FN + 'Verbose ' + commander.verbose);
 
-        inputDirectory = arg;
+        inputDirectory = ensurePathOrFileIsReadable(arg);
+        outputDirectory = ensurePathIsWriteable(commander.output);
 
 
-        if ('' === outputDirectory) {
-            if (isDirectory(inputDirectory)){
-                defaultOutputDirectory = inputDirectory;
-            } else {
-                defaultOutputDirectory = getFilenameParts(inputDirectory)[FilenameParts.Path];
-            }
-            outputDirectory = ensurePathIsWriteable(commander.output, defaultOutputDirectory);
-        }
-        if ('' === format){
-            format = coerceFormat(commander.format, 'md');
-        }
-        // if we are dealing with a dir then populate the list of input files 
-        if (isDirectory(inputDirectory)) {
+        if (isDirectory(inputDirectory)){
+            if ('' === outputDirectory) 
+                outputDirectory = inputDirectory;
             files = fs.readdirSync(inputDirectory)
-                .filter((f, i, entries) => {
-                    if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
-                        Log.console([FN + 'File: ' + f + ' will be processed from a possible ' + entries.length.toString()]);
-                        return true;
-                    }
-                })
-                .map((f, i, entries) => { return join(inputDirectory, f) });
-        } else {  // otherwise it is just one file
+            .filter((f, i, entries) => {
+                if ((typeof (f) !== 'undefined') && (f.endsWith('txt'))) {
+                    Log.console([FN + 'File: ' + f + ' will be processed from a possible ' + entries.length.toString()]);
+                    return true;
+                }
+            })
+            .map((f, i, entries) => { return join(inputDirectory, f) });
+        } else if (isAccessibleObject(inputDirectory)){
+            if ('' === outputDirectory)
+                outputDirectory = getFilenameParts(inputDirectory)[FilenameParts.Path];
             Log.console([FN + 'File: ' + inputDirectory + ' is the only specified file and will be processed.']);
             files = [inputDirectory];
+        } else {
+            if ('' === outputDirectory)
+                outputDirectory = ensurePathIsWriteable(__dirname, '~/lookup/');
+            files = [ 'ARGS~~' + arg ];
+            Log.console([FN + 'Processing input from the command line.']);
+
         }
-        // or maybe some words
+
         Log.to.info(FN + 'Input: ', files);
         let output: Lol[] = [];
         files.forEach(f => {
@@ -212,11 +221,14 @@ export module dvsLookup {
         });
         //      } //next arg
     }
+
     /*
     *Entry point
     */
     function Main() {
+        InitializeCommander();
         Log.setLogFile(join(homedir(),'lookup'), 'lookup');
+
         console.log (FN + 'Logfile at ' + Log.dir() + '/' + Log.filename() + '.log');
         Log.to.info('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
         let today = new Date();
@@ -224,7 +236,6 @@ export module dvsLookup {
         Log.to.info(FN + 'Launched on ' + dt  + '<<<<<<<<<<<<<<<<<<<<');
         Log.to.info(FN + 'Arguments: ', process.argv.join());
 
-        InitializeCommander();
 
         let a = commander.parseOptions(process.argv);
         commander.parse(a.args);

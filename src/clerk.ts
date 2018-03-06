@@ -26,9 +26,9 @@ export class Clerk {
     static readonly FN = 'Clerk:: ';
 
     /**
-     * DefineWords goes through the list of words and queries a Clerk for meanings, Etymology and 
-     * related words.  It puts that data in the iLul structure that was passed in and returns it.
-     * @param input: A Lol (Look Up List) is a structure that holds a list of words and related data. 
+     * DefineWords goes through the list of words and queries a Dictionary for meanings, Etymology and 
+     * related words.  It puts that data in the iLol structure that was passed in and returns it.
+     * @param input: A Lol (List Of Lemmas) is a structure that holds a list of words and related data. 
      * @returns a Promise of a completed Lol 
      */
     static async DefineWords(input: iLol): Promise<iLol> {
@@ -36,6 +36,8 @@ export class Clerk {
             const word = input.list[i];
             await Clerk.getMeanings(word)
             .then(await Clerk.getSynonyms)
+            //TODO Get usage frequency
+            //TODO Get examples for phrases
             .then((w) => {
                 input.list[i] = w;
             })

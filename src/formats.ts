@@ -66,7 +66,7 @@ export const html: formatStrings = {
   divider1:      '<hr />',
   divider2:      '<hr />',
   word:          '<h3>{#}. {WORD}</h3>',
-  italic:        '<br /><i>{TEXT}</i>',
+  italic:        '<i>{TEXT}</i>',
   bold:          '<br /><b>{TEXT}</b>',
   origin:        '<br /><i>Origin: {ORIGIN}</i>',
   pronunciation: '<br /><b>Pronunciation (IPA): {PRONUNCIATION}</b>',
